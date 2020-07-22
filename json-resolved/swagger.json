@@ -666,15 +666,53 @@
         }
       }
     },
-    "/lenders/{lenderId}" : {
+    "/clients" : {
+      "post" : {
+        "tags" : [ "Clients" ],
+        "summary" : "Create Client",
+        "description" : "Create Client",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_4"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments or Mismatch Passwords",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/{clientId}" : {
       "get" : {
-        "tags" : [ "Lenders" ],
-        "summary" : "Get Lender by Id",
-        "description" : "Update User",
+        "tags" : [ "Clients" ],
+        "summary" : "Get Clients by Id",
+        "description" : "Get Clients",
         "parameters" : [ {
-          "name" : "lenderId",
+          "name" : "clientId",
           "in" : "path",
-          "description" : "Lender ID",
+          "description" : "Client ID",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -689,7 +727,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_2"
+                  "$ref" : "#/components/schemas/body_4"
                 }
               }
             }
@@ -713,9 +751,98 @@
                 }
               }
             }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Clients" ],
+        "summary" : "Update Client by Id",
+        "description" : "Update Client",
+        "parameters" : [ {
+          "name" : "clientId",
+          "in" : "path",
+          "description" : "Client ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_5"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments or Mismatch Passwords",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
           },
           "404" : {
-            "description" : "User Registration Failed (User Not Found)",
+            "description" : "Client not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/{clientId}/activate" : {
+      "put" : {
+        "tags" : [ "Clients" ],
+        "summary" : "activate Client by Id",
+        "description" : "activate Client",
+        "parameters" : [ {
+          "name" : "clientId",
+          "in" : "path",
+          "description" : "Client ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Client not found",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -767,7 +894,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_4"
+                "$ref" : "#/components/schemas/body_6"
               }
             }
           }
@@ -843,7 +970,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_5"
+                "$ref" : "#/components/schemas/body_7"
               }
             }
           }
@@ -1095,7 +1222,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_3"
+                  "$ref" : "#/components/schemas/inline_response_200_2"
                 }
               }
             }
@@ -1284,7 +1411,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_4"
+                  "$ref" : "#/components/schemas/inline_response_200_3"
                 }
               }
             }
@@ -1661,7 +1788,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_5"
+                  "$ref" : "#/components/schemas/inline_response_200_4"
                 }
               }
             }
@@ -1692,7 +1819,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_6"
+                  "$ref" : "#/components/schemas/inline_response_200_5"
                 }
               }
             }
@@ -1723,7 +1850,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_7"
+                  "$ref" : "#/components/schemas/inline_response_200_6"
                 }
               }
             }
@@ -1742,7 +1869,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_8"
+                  "$ref" : "#/components/schemas/inline_response_200_7"
                 }
               }
             }
@@ -1758,7 +1885,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_6"
+                "$ref" : "#/components/schemas/body_8"
               }
             }
           },
@@ -1770,7 +1897,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_9"
+                  "$ref" : "#/components/schemas/inline_response_200_8"
                 }
               }
             }
@@ -1811,7 +1938,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_10"
+                  "$ref" : "#/components/schemas/inline_response_200_9"
                 }
               }
             }
@@ -1851,7 +1978,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_7"
+                "$ref" : "#/components/schemas/body_9"
               }
             }
           },
@@ -1863,7 +1990,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_10"
+                  "$ref" : "#/components/schemas/inline_response_200_9"
                 }
               }
             }
@@ -2837,7 +2964,20 @@
           }
         }
       },
-      "inline_response_200_2" : {
+      "body_4" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UserReq"
+        }, {
+          "$ref" : "#/components/schemas/AccountInfo"
+        }, {
+          "$ref" : "#/components/schemas/Providers"
+        }, {
+          "$ref" : "#/components/schemas/Target"
+        }, {
+          "$ref" : "#/components/schemas/OtherInfo"
+        } ]
+      },
+      "body_5" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/UserResp"
         }, {
@@ -2850,7 +2990,7 @@
           "$ref" : "#/components/schemas/OtherInfo"
         } ]
       },
-      "body_4" : {
+      "body_6" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/UserCommon"
         }, {
@@ -2875,7 +3015,7 @@
           }
         } ]
       },
-      "body_5" : {
+      "body_7" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/UserCommon"
         }, {
@@ -2915,7 +3055,7 @@
           }
         } ]
       },
-      "inline_response_200_3" : {
+      "inline_response_200_2" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/CommonResp"
         }, {
@@ -2930,7 +3070,7 @@
           }
         } ]
       },
-      "inline_response_200_4" : {
+      "inline_response_200_3" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/CommonResp"
         }, {
@@ -2945,7 +3085,7 @@
           }
         } ]
       },
-      "inline_response_200_5" : {
+      "inline_response_200_4" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/CommonResp"
         }, {
@@ -2960,7 +3100,7 @@
           }
         } ]
       },
-      "inline_response_200_6" : {
+      "inline_response_200_5" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/CommonResp"
         }, {
@@ -2975,7 +3115,7 @@
           }
         } ]
       },
-      "inline_response_200_7" : {
+      "inline_response_200_6" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/CommonResp"
         }, {
@@ -2990,7 +3130,7 @@
           }
         } ]
       },
-      "inline_response_200_8" : {
+      "inline_response_200_7" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/CommonResp"
         }, {
@@ -2999,13 +3139,13 @@
             "data" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/components/schemas/inline_response_200_8_data"
+                "$ref" : "#/components/schemas/inline_response_200_7_data"
               }
             }
           }
         } ]
       },
-      "body_6" : {
+      "body_8" : {
         "type" : "object",
         "properties" : {
           "groupName" : {
@@ -3025,7 +3165,7 @@
           }
         }
       },
-      "inline_response_200_9" : {
+      "inline_response_200_8" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/CommonResp"
         }, {
@@ -3037,7 +3177,7 @@
           }
         } ]
       },
-      "inline_response_200_10" : {
+      "inline_response_200_9" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/CommonResp"
         }, {
@@ -3049,7 +3189,7 @@
           }
         } ]
       },
-      "body_7" : {
+      "body_9" : {
         "type" : "object",
         "properties" : {
           "userList" : {
@@ -3292,7 +3432,7 @@
           }
         }
       },
-      "inline_response_200_8_data" : {
+      "inline_response_200_7_data" : {
         "type" : "object",
         "properties" : {
           "groupId" : {
