@@ -667,6 +667,26 @@
       }
     },
     "/clients" : {
+      "get" : {
+        "tags" : [ "Clients" ],
+        "summary" : "Get Client list",
+        "description" : "Get Client list",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ClientCommon"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post" : {
         "tags" : [ "Clients" ],
         "summary" : "Create Client",
@@ -2077,6 +2097,34 @@
           },
           "status" : {
             "type" : "string"
+          }
+        }
+      },
+      "ClientCommon" : {
+        "required" : [ "email", "firstName", "mobileNumber", "userId" ],
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "location" : {
+            "type" : "integer"
+          },
+          "joinDate" : {
+            "type" : "string",
+            "format" : "timestamp"
           }
         }
       },
