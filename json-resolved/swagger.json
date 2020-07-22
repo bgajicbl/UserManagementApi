@@ -1,0 +1,3283 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "UserManagementAPI",
+    "description" : "API for user management",
+    "contact" : {
+      "email" : "support@naqdina.com"
+    },
+    "license" : { },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/MiDS/UserManagementAPI/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://dev.naqdina.com/api/v1",
+    "description" : "Naqdina Dev server"
+  } ],
+  "security" : [ {
+    "application" : [ "read", "write" ]
+  } ],
+  "tags" : [ {
+    "name" : "Business Types"
+  } ],
+  "paths" : {
+    "/authenticate" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "Logs user into the system",
+        "description" : "Logs user into the system",
+        "operationId" : "loginUser",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "style" : "simple",
+                "explode" : false,
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthenticateResp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UserName or Password incorrect/ User not approved for login/Inactive User",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "userPassAuth" : [ ]
+        } ]
+      }
+    },
+    "/users" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "Add User operation",
+        "description" : "Add User.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NewUser"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Mobile number Already Exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_409"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "View Profile by ID.",
+        "description" : "Gets a user profile by ID.\n",
+        "operationId" : "getUserById",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExistingUser"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Users" ],
+        "summary" : "Update User by Id",
+        "description" : "Update User",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserReq"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments or Mismatch Passwords",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "User Registration Failed (Email Already Exists)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EmailExistsResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User Registration Failed (User Not Found)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Users" ],
+        "summary" : "View Profile by ID.",
+        "description" : "Gets a user profile by ID.\n",
+        "operationId" : "deleteUserById",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/pin" : {
+      "put" : {
+        "tags" : [ "Users" ],
+        "summary" : "The operation Changes pin for the user",
+        "description" : "Change Pin",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_1"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments/Current Pin is not matching with your existing pin/ New and Confirm PIN doesn't match",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "The operation Creates pin for the user",
+        "description" : "Set Pin",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PinReq"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments or Pin mismatch",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/roles" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "The  Operation request the admin to upgrade the role of the user",
+        "description" : "Upgrade Level",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "upgradeRole",
+          "in" : "query",
+          "description" : "Role to be upgraded to",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "example" : "ROLE_RESELLER"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpgradeLevelResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User Not Found/User Role Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RoleUpgradeFailedResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Upgrade Role should be higher than user's current role",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400_1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/invite" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "The  Operation invite users to register into the naqdina system",
+        "description" : "Invite User",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_2"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InviteUserResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invite User Count Exceeds",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400_2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/activate/{userId}" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "The Operation activates users of the naqdina system",
+        "description" : "Activate User",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "roleName",
+          "in" : "query",
+          "description" : "Role name",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ActivateUserResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserActivationFailedResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/view-agents" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "The Operation gets the list of Agents signed-up under an user",
+        "description" : "Get my agents",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ViewMyAgentsResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/password" : {
+      "put" : {
+        "tags" : [ "Users" ],
+        "summary" : "The Operation to change the password",
+        "description" : "Change Password",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_3"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Incorrect Password or Password mismatch",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lenders/{lenderId}" : {
+      "get" : {
+        "tags" : [ "Lenders" ],
+        "summary" : "Get Lender by Id",
+        "description" : "Update User",
+        "parameters" : [ {
+          "name" : "lenderId",
+          "in" : "path",
+          "description" : "Lender ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments or Mismatch Passwords",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "User Registration Failed (Email Already Exists)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EmailExistsResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User Registration Failed (User Not Found)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admins" : {
+      "get" : {
+        "tags" : [ "Admin" ],
+        "summary" : "Get Admin list",
+        "description" : "Get Admin List.",
+        "parameters" : [ {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "Role filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AdminCommon"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Admin" ],
+        "summary" : "Add Admin operation",
+        "description" : "Add Admin.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_4"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Mobile number Already Exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_409"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admins/pass-reset" : {
+      "post" : {
+        "tags" : [ "Admin" ],
+        "summary" : "Check if Password can be reset for Admin",
+        "description" : "Check for Password Reset",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/adminEmailPassResetInfo"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful Response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employees" : {
+      "post" : {
+        "tags" : [ "Employee" ],
+        "summary" : "Add Employee operation",
+        "description" : "Add Employee.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_5"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Mobile number Already Exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_409"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/otp" : {
+      "post" : {
+        "tags" : [ "otp" ],
+        "summary" : "The operation creates a otp and sends it to the client",
+        "description" : "Generate OTP.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/otpReq"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OtpResp"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Otp Generation Failed(Mobile Number Already Registered)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MobileNoExistsResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Otp Generation Failed (Invalid Arguments or Otp Request Count Exceeds)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/otp/verify" : {
+      "post" : {
+        "tags" : [ "otp" ],
+        "summary" : "The operation veify the otp enterred by the userr",
+        "description" : "Verify OTP.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/verifyOtpReq"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OtpResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "OTP Verification Failed(Invalid OTP)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "OTP Verification Failed (OTP Expired)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/otp/passresetotp" : {
+      "post" : {
+        "tags" : [ "otp" ],
+        "summary" : "The operation for password reset otp",
+        "description" : "Password reset OTP.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/passResetOtpReq"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OtpPassResetResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Password Reset Otp Generation Failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/mobileOTP" : {
+      "get" : {
+        "tags" : [ "KYC" ],
+        "summary" : "Verify Mobile OTP",
+        "description" : "Verifies Mobile OTP.\n",
+        "operationId" : "verifyMobileOTP",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "KYC" ],
+        "summary" : "Send Mobile OTP",
+        "description" : "Sends Mobile OTP.\n",
+        "operationId" : "sendMobileOTP",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found"
+          }
+        }
+      }
+    },
+    "/business-types" : {
+      "get" : {
+        "tags" : [ "Business Types" ],
+        "summary" : "Get All Business Types",
+        "description" : "Get Business Types",
+        "responses" : {
+          "200" : {
+            "description" : "Get all  Business Type Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_3"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Deleting Business Type Failed (Business Type Not Found)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BusinessTypeNotFoundResp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Business Types" ],
+        "summary" : "Add new Business Type",
+        "description" : "Add Business Type",
+        "requestBody" : {
+          "description" : "Input Business type data to be add",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BusinessTypeReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Adding Business Type Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BusinessTypeResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/business-types/{businessTypeId}" : {
+      "put" : {
+        "tags" : [ "Business Types" ],
+        "summary" : "To Update the Business Types",
+        "description" : "Update Business Type",
+        "parameters" : [ {
+          "name" : "businessTypeId",
+          "in" : "path",
+          "description" : "Business Type ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Input Business type data to be update",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BusinessTypeReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Updating Business Type Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BusinessTypeResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Updating Business Type Failed (Business Type Not Found)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BusinessTypeNotFoundResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Business Types" ],
+        "summary" : "To Delte Existing Business Types",
+        "description" : "Delete Business Type",
+        "parameters" : [ {
+          "name" : "businessTypeId",
+          "in" : "path",
+          "description" : "Business Type ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "adminId",
+          "in" : "query",
+          "description" : "Admin user ID who delete the business type",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Deleting Business Type Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BusinessTypeResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Deleting Business Type Failed (Business Type Not Found)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BusinessTypeNotFoundResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles" : {
+      "get" : {
+        "tags" : [ "Roles" ],
+        "summary" : "Get All Roles",
+        "description" : "Get Roles",
+        "parameters" : [ {
+          "name" : "deleted",
+          "in" : "query",
+          "description" : "Deleted",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Getting Roles Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_4"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Roles" ],
+        "summary" : "Add new Role",
+        "description" : "Add Role",
+        "requestBody" : {
+          "description" : "Input role data to be add",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RoleReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Adding Role Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RoleResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Role Already Exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RoleExistsResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles/{roleId}" : {
+      "post" : {
+        "tags" : [ "Roles" ],
+        "summary" : "Update existing Role",
+        "description" : "Update Role",
+        "parameters" : [ {
+          "name" : "roleId",
+          "in" : "path",
+          "description" : "Role ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Input role data to be update",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RoleReq"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Updating Role Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RoleResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Role Name Already Exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RoleExistsResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Role Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Roles" ],
+        "summary" : "Delete existing Role",
+        "description" : "Delete Role",
+        "parameters" : [ {
+          "name" : "roleId",
+          "in" : "path",
+          "description" : "Role ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "adminId",
+          "in" : "query",
+          "description" : "Admin Id",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Delete Role Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RoleResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Role Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/mailOTP" : {
+      "get" : {
+        "tags" : [ "KYC" ],
+        "summary" : "Verify Mail OTP",
+        "description" : "Verifies Mail OTP.\n",
+        "operationId" : "verifyMailOTP",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "KYC" ],
+        "summary" : "Send Mail OTP",
+        "description" : "Sends Mail OTP.\n",
+        "operationId" : "sendMailOTP",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/kycdocs" : {
+      "put" : {
+        "tags" : [ "KYC" ],
+        "summary" : "Upload KYC Docs",
+        "description" : "Uploads KYC Docs.\n",
+        "operationId" : "uploadKycDocs",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Input parameter which holds KYC Docs details",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/KycDocsInput"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/kyc" : {
+      "put" : {
+        "tags" : [ "KYC" ],
+        "summary" : "Update KYC info",
+        "description" : "Approve KYC.\n",
+        "operationId" : "updateKyc",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "User ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Input parameter which holds KYC update info",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/KycUpdateInput"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/countries" : {
+      "get" : {
+        "tags" : [ "Common" ],
+        "summary" : "Get Countries",
+        "description" : "Get Countries",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_5"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/provinces" : {
+      "get" : {
+        "tags" : [ "Common" ],
+        "summary" : "Get Provinces",
+        "description" : "Get Provinces",
+        "parameters" : [ {
+          "name" : "countryId",
+          "in" : "query",
+          "description" : "Country ID",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_6"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cities" : {
+      "get" : {
+        "tags" : [ "Common" ],
+        "summary" : "Get Cities",
+        "description" : "Get Cities",
+        "parameters" : [ {
+          "name" : "provinceId",
+          "in" : "query",
+          "description" : "Province ID",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_7"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/groups" : {
+      "get" : {
+        "tags" : [ "Groups" ],
+        "summary" : "Get Existing Groups",
+        "description" : "Get Existing Groups",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_8"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Groups" ],
+        "summary" : "Add New  Groups",
+        "description" : "Add Groups",
+        "requestBody" : {
+          "description" : "Request for Add Group",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_6"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_9"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Group Already Exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400_2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/groups/{groupId}" : {
+      "delete" : {
+        "tags" : [ "Groups" ],
+        "summary" : "Delete Existing Group",
+        "description" : "Delete Group",
+        "parameters" : [ {
+          "name" : "groupId",
+          "in" : "path",
+          "description" : "Group Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_10"
+                }
+              }
+            }
+          },
+          "226" : {
+            "description" : "Cannot Delete Group",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_400_2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/groups/{groupId}/users" : {
+      "post" : {
+        "tags" : [ "Groups" ],
+        "summary" : "Add Users to the Group",
+        "description" : "Add User to group",
+        "parameters" : [ {
+          "name" : "groupId",
+          "in" : "path",
+          "description" : "Group Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Request body for Deleting user from group",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_7"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_10"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ping" : {
+      "get" : {
+        "summary" : "Server heartbeat operation",
+        "description" : "This operation shows Server heartbeat.",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "security" : [ ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "UserCommon" : {
+        "required" : [ "city", "country", "firstName", "lastName", "mobileNumber", "parentId", "role" ],
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "integer"
+          },
+          "city" : {
+            "type" : "integer"
+          },
+          "role" : {
+            "type" : "integer"
+          },
+          "parentId" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "AdminCommon" : {
+        "required" : [ "email", "firstName", "mobileNumber", "userId" ],
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "role" : {
+            "type" : "integer"
+          },
+          "joinDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "groups" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "NewUser" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UserCommon"
+        }, {
+          "required" : [ "address", "province" ],
+          "type" : "object",
+          "properties" : {
+            "address" : {
+              "type" : "string"
+            },
+            "province" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "otpReq" : {
+        "required" : [ "mobileNumber", "role" ],
+        "type" : "object",
+        "properties" : {
+          "mobileNumber" : {
+            "type" : "string",
+            "example" : "+930798768765"
+          },
+          "role" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "ExistingUser" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "userName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "address" : {
+            "type" : "string"
+          },
+          "businessName" : {
+            "type" : "string"
+          },
+          "businessType" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UserResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/ExistingUser"
+            }
+          }
+        } ]
+      },
+      "KycDocsInput" : {
+        "type" : "object",
+        "properties" : {
+          "idProofFile" : {
+            "type" : "string"
+          },
+          "passportPhoto" : {
+            "type" : "string"
+          },
+          "businessProof" : {
+            "type" : "string"
+          }
+        }
+      },
+      "KycUpdateInput" : {
+        "type" : "object",
+        "properties" : {
+          "mobilePhone" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "photoIdProof" : {
+            "type" : "integer"
+          },
+          "photoId" : {
+            "type" : "string"
+          },
+          "businessProof" : {
+            "type" : "string"
+          },
+          "photo" : {
+            "type" : "string"
+          },
+          "otp" : {
+            "type" : "string"
+          }
+        }
+      },
+      "verifyOtpReq" : {
+        "required" : [ "otp", "userId" ],
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "otp" : {
+            "type" : "string",
+            "example" : "876789"
+          }
+        },
+        "description" : "Request to Verify the OTP"
+      },
+      "passResetOtpReq" : {
+        "required" : [ "mobileNumber", "role" ],
+        "type" : "object",
+        "properties" : {
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "role" : {
+            "type" : "string",
+            "example" : "ROLE_AGENT"
+          }
+        },
+        "description" : "Request to reset password OTP"
+      },
+      "OtpResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/OtpResp_data"
+            }
+          }
+        } ]
+      },
+      "OtpPassResetResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/OtpPassResetResp_data"
+            }
+          }
+        } ]
+      },
+      "MobileNoExistsResp" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "integer"
+          },
+          "message" : {
+            "type" : "string",
+            "example" : "OTP Generation successfull"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/MobileNoExistsResp_data"
+          }
+        }
+      },
+      "CommonErrorResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/CommonErrorResp_data"
+            }
+          }
+        } ]
+      },
+      "UserReq" : {
+        "required" : [ "address", "businessName", "businessType", "city", "confirmPassword", "country", "firstName", "lastName", "password" ],
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "integer"
+          },
+          "city" : {
+            "type" : "integer"
+          },
+          "address" : {
+            "type" : "string"
+          },
+          "businessName" : {
+            "type" : "string"
+          },
+          "businessType" : {
+            "type" : "integer"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "confirmPassword" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommonResp" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "integer"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "EmailExistsResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/EmailExistsResp_data"
+            }
+          }
+        } ]
+      },
+      "PinReq" : {
+        "required" : [ "confirmPin", "pin" ],
+        "type" : "object",
+        "properties" : {
+          "pin" : {
+            "type" : "string"
+          },
+          "confirmPin" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AuthenticateResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/AuthenticateResp_data"
+            }
+          }
+        } ]
+      },
+      "BusinessTypeReq" : {
+        "required" : [ "adminId", "businessType" ],
+        "type" : "object",
+        "properties" : {
+          "businessType" : {
+            "type" : "string"
+          },
+          "adminId" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "BusinessTypeResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "object",
+              "allOf" : [ {
+                "$ref" : "#/components/schemas/BusinessType"
+              } ]
+            }
+          }
+        } ]
+      },
+      "BusinessTypeNotFoundResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/BusinessTypeNotFoundResp_data"
+            }
+          }
+        } ]
+      },
+      "RoleReq" : {
+        "required" : [ "adminId", "hierarchy", "roleName" ],
+        "type" : "object",
+        "properties" : {
+          "roleName" : {
+            "type" : "string"
+          },
+          "adminId" : {
+            "type" : "integer"
+          },
+          "hierarchy" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "RoleResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "object",
+              "allOf" : [ {
+                "$ref" : "#/components/schemas/Role"
+              } ]
+            }
+          }
+        } ]
+      },
+      "RoleUpgradeFailedResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/RoleUpgradeFailedResp_data"
+            }
+          }
+        } ]
+      },
+      "RoleExistsResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/RoleExistsResp_data"
+            }
+          }
+        } ]
+      },
+      "BusinessType" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "lastModifiedDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "createdBy" : {
+            "type" : "integer"
+          },
+          "lastModifiedBy" : {
+            "type" : "integer"
+          },
+          "deleted" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "Role" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "roleName" : {
+            "type" : "string"
+          },
+          "createdBy" : {
+            "type" : "integer"
+          },
+          "lastModifiedBy" : {
+            "type" : "integer"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "lastModifiedDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "deleted" : {
+            "type" : "boolean"
+          },
+          "hierarchy" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "Country" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "shortName" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "phoneCode" : {
+            "type" : "string"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "lastModifiedDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          }
+        }
+      },
+      "Province" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "countryId" : {
+            "type" : "integer"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "lastModifiedDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          }
+        }
+      },
+      "City" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "provinceId" : {
+            "type" : "integer"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "lastModifiedDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          }
+        }
+      },
+      "UpgradeLevelResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/UpgradeLevelResp_data"
+            }
+          }
+        } ]
+      },
+      "ActivateUserResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/ActivateUserResp_data"
+            }
+          }
+        } ]
+      },
+      "UserActivationFailedResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/UserActivationFailedResp_data"
+            }
+          }
+        } ]
+      },
+      "InviteUserResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "anyOf" : [ {
+                  "type" : "object",
+                  "properties" : {
+                    "user" : {
+                      "type" : "string"
+                    },
+                    "inviteStatus" : {
+                      "type" : "string",
+                      "example" : "success"
+                    },
+                    "message" : {
+                      "type" : "string",
+                      "example" : "User Invited Success"
+                    },
+                    "code" : {
+                      "type" : "integer",
+                      "example" : 200
+                    }
+                  }
+                }, {
+                  "type" : "object",
+                  "properties" : {
+                    "user" : {
+                      "type" : "string"
+                    },
+                    "inviteStatus" : {
+                      "type" : "string",
+                      "example" : "failed"
+                    },
+                    "message" : {
+                      "type" : "string",
+                      "example" : "User Invited already"
+                    },
+                    "code" : {
+                      "type" : "integer",
+                      "example" : 409
+                    }
+                  }
+                }, {
+                  "type" : "object",
+                  "properties" : {
+                    "user" : {
+                      "type" : "string"
+                    },
+                    "inviteStatus" : {
+                      "type" : "string",
+                      "example" : "failed"
+                    },
+                    "message" : {
+                      "type" : "string",
+                      "example" : "User Already Registered with Naqdina System"
+                    },
+                    "code" : {
+                      "type" : "integer",
+                      "example" : 400
+                    }
+                  }
+                } ]
+              }
+            }
+          }
+        } ]
+      },
+      "NewUserResp" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/NewUserResp_data"
+          }
+        }
+      },
+      "ViewMyAgentsResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "anyOf" : [ {
+                  "type" : "object",
+                  "properties" : {
+                    "user" : {
+                      "type" : "string"
+                    },
+                    "inviteStatus" : {
+                      "type" : "string",
+                      "example" : "success"
+                    },
+                    "message" : {
+                      "type" : "string",
+                      "example" : "View My Agents Success"
+                    },
+                    "code" : {
+                      "type" : "integer",
+                      "example" : 200
+                    }
+                  }
+                } ]
+              }
+            }
+          }
+        } ]
+      },
+      "GroupDetail" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "groupDeleted" : {
+            "type" : "boolean"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "lastModifiedDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "createdBy" : {
+            "type" : "integer"
+          },
+          "lastModifiedBy" : {
+            "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "adminEmailPassResetInfo" : {
+        "required" : [ "adminEmail" ],
+        "type" : "object",
+        "properties" : {
+          "adminEmail" : {
+            "type" : "string",
+            "example" : "test@test.com"
+          }
+        }
+      },
+      "AccountInfo" : {
+        "type" : "object",
+        "properties" : {
+          "receiver" : {
+            "type" : "string"
+          },
+          "bankName" : {
+            "type" : "integer"
+          },
+          "iban" : {
+            "type" : "string"
+          },
+          "swift" : {
+            "type" : "string"
+          }
+        }
+      },
+      "body" : {
+        "required" : [ "password", "username" ],
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_200" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "$ref" : "#/components/schemas/NewUserResp"
+        } ]
+      },
+      "inline_response_409" : {
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/MobileNoExistsResp"
+        }, {
+          "$ref" : "#/components/schemas/EmailExistsResp"
+        } ]
+      },
+      "body_1" : {
+        "required" : [ "confirmPin", "currentPin", "newPin" ],
+        "type" : "object",
+        "properties" : {
+          "currentPin" : {
+            "type" : "string"
+          },
+          "newPin" : {
+            "type" : "string"
+          },
+          "confirmPin" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_200_1" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/inline_response_200_1_data"
+            }
+          }
+        } ]
+      },
+      "inline_response_400" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonErrorResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/inline_response_400_data"
+            }
+          }
+        } ]
+      },
+      "inline_response_400_1" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/inline_response_400_1_data"
+            }
+          }
+        } ]
+      },
+      "body_2" : {
+        "type" : "object",
+        "properties" : {
+          "inviteUsers" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "example" : "example@gmail.com"
+            }
+          }
+        }
+      },
+      "inline_response_400_2" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonErrorResp"
+        } ]
+      },
+      "body_3" : {
+        "required" : [ "confirmPassword", "currentPassword", "newPassword" ],
+        "type" : "object",
+        "properties" : {
+          "currentPassword" : {
+            "type" : "string"
+          },
+          "newPassword" : {
+            "type" : "string"
+          },
+          "confirmPassword" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_200_2" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UserResp"
+        }, {
+          "$ref" : "#/components/schemas/AccountInfo"
+        } ]
+      },
+      "body_4" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UserCommon"
+        }, {
+          "required" : [ "profilePicture", "status" ],
+          "type" : "object",
+          "properties" : {
+            "profilePicture" : {
+              "type" : "string"
+            },
+            "groups" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer"
+              }
+            },
+            "status" : {
+              "type" : "string"
+            },
+            "remarks" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "body_5" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UserCommon"
+        }, {
+          "required" : [ "profilePicture", "status" ],
+          "type" : "object",
+          "properties" : {
+            "profilePicture" : {
+              "type" : "string"
+            },
+            "groups" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer"
+              }
+            },
+            "status" : {
+              "type" : "string"
+            },
+            "remarks" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "inline_response_404" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "details" : {
+              "type" : "string"
+            },
+            "mobileNumber" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "inline_response_200_3" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/BusinessType"
+              }
+            }
+          }
+        } ]
+      },
+      "inline_response_200_4" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Role"
+              }
+            }
+          }
+        } ]
+      },
+      "inline_response_200_5" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Country"
+              }
+            }
+          }
+        } ]
+      },
+      "inline_response_200_6" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Province"
+              }
+            }
+          }
+        } ]
+      },
+      "inline_response_200_7" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/City"
+              }
+            }
+          }
+        } ]
+      },
+      "inline_response_200_8" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/inline_response_200_8_data"
+              }
+            }
+          }
+        } ]
+      },
+      "body_6" : {
+        "type" : "object",
+        "properties" : {
+          "groupName" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "userList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "adminId" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "inline_response_200_9" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/GroupDetail"
+            }
+          }
+        } ]
+      },
+      "inline_response_200_10" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "body_7" : {
+        "type" : "object",
+        "properties" : {
+          "userList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          }
+        }
+      },
+      "OtpResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "otpValidationStatus" : {
+            "type" : "string",
+            "example" : "Pending"
+          }
+        }
+      },
+      "OtpPassResetResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer",
+            "example" : 6
+          },
+          "message" : {
+            "type" : "string",
+            "example" : "success"
+          }
+        }
+      },
+      "MobileNoExistsResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "details" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommonErrorResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "details" : {
+            "type" : "string"
+          }
+        }
+      },
+      "EmailExistsResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "details" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AuthenticateResp_data_authorities" : {
+        "type" : "object",
+        "properties" : {
+          "authority" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AuthenticateResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "accessToken" : {
+            "type" : "string"
+          },
+          "userName" : {
+            "type" : "string"
+          },
+          "authorities" : {
+            "$ref" : "#/components/schemas/AuthenticateResp_data_authorities"
+          }
+        }
+      },
+      "BusinessTypeNotFoundResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "details" : {
+            "type" : "string"
+          },
+          "businessType" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "RoleUpgradeFailedResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "details" : {
+            "type" : "string"
+          },
+          "role" : {
+            "type" : "string"
+          },
+          "userId" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "RoleExistsResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "role" : {
+            "type" : "string"
+          },
+          "details" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UpgradeLevelResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "userRole" : {
+            "type" : "string"
+          },
+          "roleToUpgrade" : {
+            "type" : "string"
+          },
+          "upgradeLevelStatus" : {
+            "type" : "string",
+            "example" : "Pending"
+          }
+        }
+      },
+      "ActivateUserResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer",
+            "example" : 6
+          },
+          "userRole" : {
+            "type" : "string",
+            "example" : "ROLE_RESELLER"
+          },
+          "userStatus" : {
+            "type" : "string",
+            "example" : "Active"
+          }
+        }
+      },
+      "UserActivationFailedResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "details" : {
+            "type" : "string"
+          },
+          "userId" : {
+            "type" : "integer"
+          },
+          "role" : {
+            "type" : "string"
+          }
+        }
+      },
+      "NewUserResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "userName" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_200_1_data" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "mpinModifiedDatetime" : {
+            "type" : "string",
+            "format" : "timestamp"
+          }
+        }
+      },
+      "inline_response_400_data" : {
+        "type" : "object",
+        "properties" : {
+          "incorrectPin" : {
+            "type" : "string"
+          },
+          "details" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_400_1_data" : {
+        "type" : "object",
+        "properties" : {
+          "details" : {
+            "type" : "string"
+          },
+          "role" : {
+            "type" : "string"
+          },
+          "upgradeRole" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_200_8_data" : {
+        "type" : "object",
+        "properties" : {
+          "groupId" : {
+            "type" : "integer"
+          },
+          "groupName" : {
+            "type" : "string"
+          },
+          "groupDescription" : {
+            "type" : "string"
+          },
+          "groupUserCount" : {
+            "type" : "integer"
+          }
+        }
+      }
+    },
+    "responses" : {
+      "UnauthorizedError" : {
+        "description" : "Authentication information is missing or invalid",
+        "headers" : {
+          "WWW_Authenticate" : {
+            "style" : "simple",
+            "explode" : false,
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "userPassAuth" : {
+        "type" : "http",
+        "scheme" : "basic"
+      },
+      "application" : {
+        "type" : "oauth2",
+        "flows" : {
+          "clientCredentials" : {
+            "tokenUrl" : "http://example.com/oauth/token",
+            "scopes" : {
+              "write" : "allows modifying resources",
+              "read" : "allows reading resources"
+            }
+          }
+        }
+      }
+    }
+  }
+}
