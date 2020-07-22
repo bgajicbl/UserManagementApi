@@ -2671,6 +2671,26 @@
           }
         }
       },
+      "Providers" : {
+        "type" : "object",
+        "properties" : {
+          "commisionStructure" : {
+            "type" : "boolean"
+          },
+          "provider" : {
+            "type" : "boolean"
+          },
+          "products" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "detailedCommision" : {
+            "type" : "number"
+          }
+        }
+      },
       "body" : {
         "required" : [ "password", "username" ],
         "type" : "object",
