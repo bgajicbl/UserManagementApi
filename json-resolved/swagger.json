@@ -982,6 +982,37 @@
       }
     },
     "/employees" : {
+      "get" : {
+        "tags" : [ "Employee" ],
+        "summary" : "Get Employee list",
+        "description" : "Get Employee List.",
+        "parameters" : [ {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "Role filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AdminCommon"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post" : {
         "tags" : [ "Employee" ],
         "summary" : "Add Employee operation",
@@ -1001,7 +1032,94 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200"
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Mobile number Already Exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_409"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employees/{id}" : {
+      "get" : {
+        "tags" : [ "Employee" ],
+        "summary" : "Get Employee by id",
+        "description" : "Get Employee .",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Employee id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminCommon"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Employee" ],
+        "summary" : "Edit Employee operation",
+        "description" : "Edit Employee.",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Employee id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_8"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
                 }
               }
             }
@@ -1905,7 +2023,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_8"
+                "$ref" : "#/components/schemas/body_9"
               }
             }
           },
@@ -1998,7 +2116,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_9"
+                "$ref" : "#/components/schemas/body_10"
               }
             }
           },
@@ -3088,6 +3206,31 @@
           }
         } ]
       },
+      "body_8" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UserCommon"
+        }, {
+          "required" : [ "profilePicture", "status" ],
+          "type" : "object",
+          "properties" : {
+            "profilePicture" : {
+              "type" : "string"
+            },
+            "groups" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer"
+              }
+            },
+            "status" : {
+              "type" : "string"
+            },
+            "remarks" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
       "inline_response_404" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/CommonResp"
@@ -3193,7 +3336,7 @@
           }
         } ]
       },
-      "body_8" : {
+      "body_9" : {
         "type" : "object",
         "properties" : {
           "groupName" : {
@@ -3237,7 +3380,7 @@
           }
         } ]
       },
-      "body_9" : {
+      "body_10" : {
         "type" : "object",
         "properties" : {
           "userList" : {
