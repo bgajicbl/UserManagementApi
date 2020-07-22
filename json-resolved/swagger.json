@@ -2691,6 +2691,43 @@
           }
         }
       },
+      "Target" : {
+        "type" : "object",
+        "properties" : {
+          "settarget" : {
+            "type" : "boolean"
+          },
+          "period" : {
+            "type" : "integer"
+          },
+          "type" : {
+            "type" : "integer"
+          },
+          "target" : {
+            "type" : "number"
+          }
+        }
+      },
+      "OtherInfo" : {
+        "type" : "object",
+        "properties" : {
+          "groups" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "status" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "remarks" : {
+            "type" : "string"
+          }
+        }
+      },
       "body" : {
         "required" : [ "password", "username" ],
         "type" : "object",
@@ -2805,6 +2842,12 @@
           "$ref" : "#/components/schemas/UserResp"
         }, {
           "$ref" : "#/components/schemas/AccountInfo"
+        }, {
+          "$ref" : "#/components/schemas/Providers"
+        }, {
+          "$ref" : "#/components/schemas/Target"
+        }, {
+          "$ref" : "#/components/schemas/OtherInfo"
         } ]
       },
       "body_4" : {
