@@ -953,6 +953,93 @@
         }
       }
     },
+    "/admins/{id}" : {
+      "get" : {
+        "tags" : [ "Admin" ],
+        "summary" : "Get Admin by id",
+        "description" : "Get Admin .",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Admin id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminCommon"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Admin" ],
+        "summary" : "Edit Admin operation",
+        "description" : "Edit Admin.",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Admin id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_7"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Mobile number Already Exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_409"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admins/pass-reset" : {
       "post" : {
         "tags" : [ "Admin" ],
@@ -1021,7 +1108,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_7"
+                "$ref" : "#/components/schemas/body_8"
               }
             }
           }
@@ -1108,7 +1195,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_8"
+                "$ref" : "#/components/schemas/body_9"
               }
             }
           }
@@ -2016,14 +2103,14 @@
       },
       "post" : {
         "tags" : [ "Groups" ],
-        "summary" : "Add New  Groups",
-        "description" : "Add Groups",
+        "summary" : "Add New  Group",
+        "description" : "Add Group",
         "requestBody" : {
           "description" : "Request for Add Group",
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_9"
+                "$ref" : "#/components/schemas/body_10"
               }
             }
           },
@@ -2112,11 +2199,11 @@
           }
         } ],
         "requestBody" : {
-          "description" : "Request body for Deleting user from group",
+          "description" : "Request body for adding user to group",
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_10"
+                "$ref" : "#/components/schemas/body_11"
               }
             }
           },
@@ -2576,6 +2663,9 @@
           "adminId" : {
             "type" : "integer"
           },
+          "featureList" : {
+            "type" : "integer"
+          },
           "hierarchy" : {
             "type" : "integer"
           }
@@ -2671,6 +2761,9 @@
           "lastModifiedDate" : {
             "type" : "string",
             "format" : "timestamp"
+          },
+          "featureList" : {
+            "type" : "integer"
           },
           "deleted" : {
             "type" : "boolean"
@@ -3231,6 +3324,31 @@
           }
         } ]
       },
+      "body_9" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UserCommon"
+        }, {
+          "required" : [ "profilePicture", "status" ],
+          "type" : "object",
+          "properties" : {
+            "profilePicture" : {
+              "type" : "string"
+            },
+            "groups" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer"
+              }
+            },
+            "status" : {
+              "type" : "string"
+            },
+            "remarks" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
       "inline_response_404" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/CommonResp"
@@ -3336,7 +3454,7 @@
           }
         } ]
       },
-      "body_9" : {
+      "body_10" : {
         "type" : "object",
         "properties" : {
           "groupName" : {
@@ -3380,7 +3498,7 @@
           }
         } ]
       },
-      "body_10" : {
+      "body_11" : {
         "type" : "object",
         "properties" : {
           "userList" : {
