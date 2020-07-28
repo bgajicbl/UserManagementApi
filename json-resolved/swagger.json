@@ -1,0 +1,938 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Balances API",
+    "description" : "This is a API for balances",
+    "contact" : {
+      "email" : "support@naqdina.com"
+    },
+    "license" : { },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/MiDS/NotificationsAPI/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "tags" : [ {
+    "name" : "view",
+    "description" : "view balances"
+  } ],
+  "paths" : {
+    "/balances/stats" : {
+      "get" : {
+        "tags" : [ "view" ],
+        "summary" : "view statistics",
+        "description" : "By calling this endpoint, you can view statistics\n",
+        "operationId" : "viewBalanceStats",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BalanceStats"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/balances/requests" : {
+      "get" : {
+        "tags" : [ "view" ],
+        "summary" : "view balances requests",
+        "description" : "By passing in the appropriate parameters, you can view balances requests\n",
+        "operationId" : "viewAllBalanceRequests",
+        "parameters" : [ {
+          "name" : "agent",
+          "in" : "query",
+          "description" : "agent search",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "daysFilter",
+          "in" : "query",
+          "description" : "Days Filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/BalanceRequests"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/balances/requests/{requestId}" : {
+      "put" : {
+        "tags" : [ "view" ],
+        "summary" : "verify balances requests",
+        "description" : "By passing in the appropriate parameters, you can approve or deny balance request\n",
+        "operationId" : "verifyBalanceRequest",
+        "parameters" : [ {
+          "name" : "requestId",
+          "in" : "path",
+          "description" : "agent search",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CommonResp"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Request not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "PIN not valid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/balances/{clientType}" : {
+      "get" : {
+        "tags" : [ "view" ],
+        "summary" : "view balances of distributors, resellers, agents and api clients",
+        "description" : "By passing in the appropriate parameters, you can view balances of distributors, resellers, agents and api clients\n",
+        "operationId" : "viewBalance",
+        "parameters" : [ {
+          "name" : "clientType",
+          "in" : "path",
+          "description" : "Client type",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "distributors", "resellers", "agents", "apiClients" ]
+          }
+        }, {
+          "name" : "daysFilter",
+          "in" : "query",
+          "description" : "Days Filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/BalancesResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/balances/{userId}/request/{handlerType}" : {
+      "get" : {
+        "tags" : [ "view" ],
+        "summary" : "view balance requests to agent for user",
+        "description" : "By passing in the appropriate parameters, you can view balance requests\n",
+        "operationId" : "viewBalanceRequests",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "handlerType",
+          "in" : "path",
+          "description" : "handler type",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "agent", "lender" ]
+          }
+        }, {
+          "name" : "daysFilter",
+          "in" : "query",
+          "description" : "Days Filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "view" ],
+        "summary" : "new balance request to agent for user",
+        "description" : "By passing in the appropriate parameters, you can create balance request\n",
+        "operationId" : "newBalanceRequest",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "handlerType",
+          "in" : "path",
+          "description" : "handler type",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "agent", "lender" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_1"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/balances/{userId}/transfer" : {
+      "post" : {
+        "tags" : [ "view" ],
+        "summary" : "transfer balance requests to agent for user",
+        "description" : "By passing in the appropriate parameters, you can transfer balance",
+        "operationId" : "transferBalance",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_2"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/balances/{userId}/add" : {
+      "put" : {
+        "tags" : [ "view" ],
+        "summary" : "add balance requests to agent",
+        "description" : "By passing in the appropriate parameters, you can add balance",
+        "operationId" : "addBalance",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_3"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/balances/{userId}/refund" : {
+      "put" : {
+        "tags" : [ "view" ],
+        "summary" : "refund balance requests to agent",
+        "description" : "By passing in the appropriate parameters, you can refund balance",
+        "operationId" : "refundBalance",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_4"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/balances/{transactionId}/confirm" : {
+      "post" : {
+        "tags" : [ "view" ],
+        "summary" : "confirm transaction",
+        "description" : "By passing in the appropriate parameters, you can confirm transaction\n",
+        "operationId" : "confirmTransaction",
+        "parameters" : [ {
+          "name" : "transactionId",
+          "in" : "path",
+          "description" : "transaction id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_5"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "BalanceStats" : {
+        "type" : "object",
+        "properties" : {
+          "totalAcceptedAmount" : {
+            "type" : "number"
+          },
+          "totalPendingRequests" : {
+            "type" : "number"
+          }
+        }
+      },
+      "BalanceRequests" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "integer"
+          },
+          "salesmanName" : {
+            "type" : "string"
+          },
+          "salesmanId" : {
+            "type" : "integer"
+          },
+          "dateTime" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "transactionAmount" : {
+            "type" : "number"
+          },
+          "transactionId" : {
+            "type" : "integer"
+          },
+          "paymentMode" : {
+            "type" : "integer"
+          },
+          "bankName" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "integer"
+          },
+          "userId" : {
+            "type" : "integer"
+          },
+          "emailId" : {
+            "type" : "integer"
+          },
+          "portalId" : {
+            "type" : "integer"
+          },
+          "companyName" : {
+            "type" : "string"
+          },
+          "acceptedAmount" : {
+            "type" : "number"
+          },
+          "tid" : {
+            "type" : "string"
+          },
+          "transactionStatus" : {
+            "type" : "integer"
+          },
+          "depositDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "chequeDDNo" : {
+            "type" : "string"
+          },
+          "transactionRemark" : {
+            "type" : "string"
+          }
+        }
+      },
+      "BalancesResp" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "userId" : {
+            "type" : "integer"
+          },
+          "openingBalance" : {
+            "type" : "number"
+          },
+          "amountDeposited" : {
+            "type" : "number"
+          },
+          "amountUsed" : {
+            "type" : "number"
+          },
+          "endingBalance" : {
+            "type" : "number"
+          }
+        }
+      },
+      "BalanceCommon" : {
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "type" : "number"
+          },
+          "paymentDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "paymentMode" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "CommonResp" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "integer"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommonErrorResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/CommonErrorResp_data"
+            }
+          }
+        } ]
+      },
+      "ServerErrorResp" : {
+        "type" : "object",
+        "properties" : {
+          "timestamp" : {
+            "type" : "string",
+            "example" : "2020-07-04T20:29:06.009+00:00"
+          },
+          "status" : {
+            "type" : "number",
+            "example" : 500
+          },
+          "error" : {
+            "type" : "string",
+            "example" : "Internal Server Error"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "/balances/distributors"
+          }
+        }
+      },
+      "body" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "pin" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "inline_response_200" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BalanceCommon"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "status" : {
+              "type" : "integer"
+            }
+          }
+        } ]
+      },
+      "body_1" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BalanceCommon"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "handlerId" : {
+              "type" : "integer"
+            },
+            "bankName" : {
+              "type" : "integer"
+            },
+            "trx" : {
+              "type" : "string"
+            },
+            "remarks" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "body_2" : {
+        "type" : "object",
+        "properties" : {
+          "agentId" : {
+            "type" : "integer"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "remarks" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_200_1" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "transactionId" : {
+              "type" : "integer"
+            }
+          }
+        } ]
+      },
+      "body_3" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "integer"
+          },
+          "referenceNo" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "number"
+          }
+        }
+      },
+      "body_4" : {
+        "type" : "object",
+        "properties" : {
+          "clientId" : {
+            "type" : "integer"
+          },
+          "referenceNo" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "agentId" : {
+            "type" : "integer"
+          },
+          "pendingSettlement" : {
+            "type" : "string"
+          }
+        }
+      },
+      "body_5" : {
+        "type" : "object",
+        "properties" : {
+          "pin" : {
+            "type" : "integer"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommonErrorResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "details" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "tokenAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}
