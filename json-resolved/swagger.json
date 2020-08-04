@@ -1,0 +1,368 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Recharge API",
+    "description" : "This is a recharge API",
+    "contact" : {
+      "email" : "support@naqdina.com"
+    },
+    "license" : { },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/MiDS/RechargesAPI/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "tags" : [ {
+    "name" : "topup",
+    "description" : "recharge operations"
+  }, {
+    "name" : "e-voucher",
+    "description" : "evoucher operations"
+  }, {
+    "name" : "list",
+    "description" : "list operations"
+  } ],
+  "paths" : {
+    "/recharges/{userId}" : {
+      "get" : {
+        "tags" : [ "list" ],
+        "summary" : "view all transactions",
+        "description" : "By passing in the appropriate parameters, you can view all transactions\n",
+        "operationId" : "viewAllTransactions",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "userId",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/TransactionResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/recharges/{userId}/topup" : {
+      "post" : {
+        "tags" : [ "topup" ],
+        "summary" : "recharges user using mobile topup",
+        "description" : "recharges user using mobile topup",
+        "operationId" : "rechargeTopup",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "mobile topup details",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TopupRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TopupResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/recharges/{userId}/evoucher" : {
+      "post" : {
+        "tags" : [ "e-voucher" ],
+        "summary" : "generate e-voucher",
+        "description" : "generate e-voucher",
+        "operationId" : "rechargeVaucher",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "e-voucher details",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EvoucherRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EvoucherResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "TopupRequest" : {
+        "type" : "object",
+        "properties" : {
+          "country" : {
+            "type" : "integer"
+          },
+          "mobilePhone" : {
+            "type" : "string"
+          },
+          "mobileOperator" : {
+            "type" : "integer"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "pin" : {
+            "type" : "string"
+          },
+          "channel" : {
+            "type" : "string"
+          }
+        }
+      },
+      "TopupResponse" : {
+        "type" : "object",
+        "properties" : {
+          "dateTime" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "mobilePhone" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "EvoucherRequest" : {
+        "type" : "object",
+        "properties" : {
+          "mobileOperator" : {
+            "type" : "integer"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "pin" : {
+            "type" : "string"
+          },
+          "channel" : {
+            "type" : "string"
+          }
+        }
+      },
+      "EvoucherResponse" : {
+        "type" : "object",
+        "properties" : {
+          "dateTime" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "evoucherNumber" : {
+            "type" : "string"
+          },
+          "mobileOperator" : {
+            "type" : "integer"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "TransactionResponse" : {
+        "type" : "object",
+        "properties" : {
+          "requestnumber" : {
+            "type" : "string"
+          },
+          "mobilePhone" : {
+            "type" : "string"
+          },
+          "mobileOperator" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "number"
+          }
+        }
+      },
+      "CommonResp" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "integer"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommonErrorResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/CommonErrorResp_data"
+            }
+          }
+        } ]
+      },
+      "ServerErrorResp" : {
+        "type" : "object",
+        "properties" : {
+          "timestamp" : {
+            "type" : "string",
+            "example" : "2020-07-04T20:29:06.009+00:00"
+          },
+          "status" : {
+            "type" : "number",
+            "example" : 500
+          },
+          "error" : {
+            "type" : "string",
+            "example" : "Internal Server Error"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "/balances/distributors"
+          }
+        }
+      },
+      "CommonErrorResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "details" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "tokenAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}
