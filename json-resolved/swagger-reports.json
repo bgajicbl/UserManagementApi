@@ -1,0 +1,842 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Reports API",
+    "description" : "This is a API for reports",
+    "contact" : {
+      "email" : "support@naqdina.com"
+    },
+    "license" : { },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/MiDS/ReportsAPI/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://virtserver.swaggerhub.com/MiDS/BalancesAPI/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "tags" : [ {
+    "name" : "sales",
+    "description" : "sales reports"
+  }, {
+    "name" : "performance",
+    "description" : "performance reports"
+  }, {
+    "name" : "users",
+    "description" : "users reports"
+  }, {
+    "name" : "transactions",
+    "description" : "transactions reports"
+  }, {
+    "name" : "notifications",
+    "description" : "notifications reports"
+  }, {
+    "name" : "logs",
+    "description" : "logs reports"
+  } ],
+  "paths" : {
+    "/reports/sales" : {
+      "get" : {
+        "tags" : [ "sales" ],
+        "summary" : "view sales report",
+        "description" : "By calling this endpoint, you can view  sales report \n",
+        "operationId" : "viewSalesReport",
+        "parameters" : [ {
+          "name" : "date",
+          "in" : "query",
+          "description" : "date",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }, {
+          "name" : "period",
+          "in" : "query",
+          "description" : "period Filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "agentType",
+          "in" : "query",
+          "description" : "agent type",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "trxType",
+          "in" : "query",
+          "description" : "transaction type",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "byProvider",
+          "in" : "query",
+          "description" : "Percentage Sales by Provider",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SalesData"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/reports/agent-performance/{id}" : {
+      "get" : {
+        "tags" : [ "performance" ],
+        "summary" : "view agent performance report",
+        "description" : "By calling this endpoint, you can view agent performance report \n",
+        "operationId" : "viewAgentPerformance",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "agent id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "period",
+          "in" : "query",
+          "description" : "period Filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AgentPerformance"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "performance" ],
+        "summary" : "set agent performance sales target",
+        "description" : "By calling this endpoint, you can set agent performance sales target\n",
+        "operationId" : "setgentPerformanceSalesTarget",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "agent id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "input agent performance sales target",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/reports/credit-statement" : {
+      "get" : {
+        "tags" : [ "sales" ],
+        "summary" : "view credit statement",
+        "description" : "By calling this endpoint, you can view credit statement\n",
+        "operationId" : "viewCreditStatement",
+        "parameters" : [ {
+          "name" : "dateFrom",
+          "in" : "query",
+          "description" : "date",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }, {
+          "name" : "dateTo",
+          "in" : "query",
+          "description" : "date",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }, {
+          "name" : "period",
+          "in" : "query",
+          "description" : "period Filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "today", "week", "month", "year" ]
+          }
+        }, {
+          "name" : "agent",
+          "in" : "query",
+          "description" : "agent",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreditStatementData"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/reports/users/total" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "view total number or users by type report",
+        "description" : "By calling this endpoint, you can total users by type\n",
+        "operationId" : "viewTotalUsers",
+        "parameters" : [ {
+          "name" : "days",
+          "in" : "query",
+          "description" : "days filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TotalUsers"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/reports/transactions/total" : {
+      "get" : {
+        "tags" : [ "transactions" ],
+        "summary" : "view total number or transactions by status report",
+        "description" : "By calling this endpoint, you can total transactions by status\n",
+        "operationId" : "viewTotalTransactions",
+        "parameters" : [ {
+          "name" : "days",
+          "in" : "query",
+          "description" : "days filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TotalTransactions"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/reports/transactions/{id}" : {
+      "get" : {
+        "tags" : [ "transactions" ],
+        "summary" : "view transaction by id",
+        "description" : "By calling this endpoint, you can total transaction by id\n",
+        "operationId" : "viewTransaction",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "transaction by id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TransactionReport"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/reports/notifications/total" : {
+      "get" : {
+        "tags" : [ "notifications" ],
+        "summary" : "view total number or notifications by status report",
+        "description" : "By calling this endpoint, you can total notifications by status\n",
+        "operationId" : "viewTotalNotifications",
+        "parameters" : [ {
+          "name" : "days",
+          "in" : "query",
+          "description" : "days filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TotalNotifications"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/reports/notifications/{id}" : {
+      "get" : {
+        "tags" : [ "notifications" ],
+        "summary" : "view notification by id",
+        "description" : "By calling this endpoint, you can view notification by id\n",
+        "operationId" : "viewNotification",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "notification by id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NotificationReport"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "SalesData" : {
+        "type" : "object",
+        "properties" : {
+          "totalAmount" : {
+            "type" : "number"
+          },
+          "totalPendingAmount" : {
+            "type" : "number"
+          },
+          "trxNumber" : {
+            "type" : "number"
+          }
+        }
+      },
+      "AgentPerformance" : {
+        "type" : "object",
+        "properties" : {
+          "agentName" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "number"
+          }
+        }
+      },
+      "CreditStatementData" : {
+        "type" : "object",
+        "properties" : {
+          "dateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "number"
+          }
+        }
+      },
+      "TotalUsers" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/TotalUsers_data"
+            }
+          }
+        } ]
+      },
+      "TotalTransactions" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/TotalTransactions_data"
+            }
+          }
+        } ]
+      },
+      "TransactionReport" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/TransactionReport_data"
+            }
+          }
+        } ]
+      },
+      "TotalNotifications" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/TotalNotifications_data"
+            }
+          }
+        } ]
+      },
+      "NotificationReport" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/NotificationReport_data"
+            }
+          }
+        } ]
+      },
+      "CommonResp" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "integer"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommonErrorResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/CommonErrorResp_data"
+            }
+          }
+        } ]
+      },
+      "ServerErrorResp" : {
+        "type" : "object",
+        "properties" : {
+          "timestamp" : {
+            "type" : "string",
+            "example" : "2020-07-04T20:29:06.009+00:00"
+          },
+          "status" : {
+            "type" : "number",
+            "example" : 500
+          },
+          "error" : {
+            "type" : "string",
+            "example" : "Internal Server Error"
+          },
+          "message" : {
+            "type" : "string",
+            "example" : ""
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "/balances/distributors"
+          }
+        }
+      },
+      "body" : {
+        "type" : "object",
+        "properties" : {
+          "monthlyTarget" : {
+            "type" : "number"
+          }
+        }
+      },
+      "TotalUsers_data" : {
+        "type" : "object",
+        "properties" : {
+          "TotalUsers" : {
+            "type" : "number"
+          },
+          "TotalSalesman" : {
+            "type" : "number"
+          },
+          "TotalDistributors" : {
+            "type" : "number"
+          },
+          "TotalResellers" : {
+            "type" : "number"
+          },
+          "TotalAgents" : {
+            "type" : "number"
+          }
+        }
+      },
+      "TotalTransactions_data" : {
+        "type" : "object",
+        "properties" : {
+          "TotalRequests" : {
+            "type" : "number"
+          },
+          "SuccessfulRequests" : {
+            "type" : "number"
+          },
+          "FailedRefundRequests" : {
+            "type" : "number"
+          },
+          "PendingRequests" : {
+            "type" : "number"
+          }
+        }
+      },
+      "TransactionReport_data" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "dateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "salesmanId" : {
+            "type" : "integer"
+          },
+          "salesmanName" : {
+            "type" : "string"
+          },
+          "customerMobileNo" : {
+            "type" : "string"
+          },
+          "product" : {
+            "type" : "string"
+          },
+          "provider" : {
+            "type" : "string"
+          },
+          "faceValue" : {
+            "type" : "number"
+          },
+          "netValue" : {
+            "type" : "number"
+          },
+          "resellerCommission" : {
+            "type" : "number"
+          },
+          "naqdinaCommission" : {
+            "type" : "number"
+          },
+          "channel" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "TotalNotifications_data" : {
+        "type" : "object",
+        "properties" : {
+          "TotalNotificationss" : {
+            "type" : "number"
+          },
+          "SuccessfulNotifications" : {
+            "type" : "number"
+          },
+          "FailedNotifications" : {
+            "type" : "number"
+          },
+          "PendingNotifications" : {
+            "type" : "number"
+          }
+        }
+      },
+      "NotificationReport_data" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "dateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "salesmanId" : {
+            "type" : "integer"
+          },
+          "salesmanName" : {
+            "type" : "string"
+          },
+          "salesmanMobileNo" : {
+            "type" : "string"
+          },
+          "customerMobileNo" : {
+            "type" : "string"
+          },
+          "provider" : {
+            "type" : "string"
+          },
+          "smsType" : {
+            "type" : "string"
+          },
+          "smsText" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommonErrorResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "details" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "tokenAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}
