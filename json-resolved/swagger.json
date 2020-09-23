@@ -1,8 +1,8 @@
 {
   "openapi" : "3.0.0",
   "info" : {
-    "title" : "Balances API",
-    "description" : "This is a API for balances",
+    "title" : "Balances and Transactions API",
+    "description" : "This is a API for balances and transactions",
     "contact" : {
       "email" : "support@naqdina.com"
     },
@@ -10,17 +10,26 @@
     "version" : "1.0.0"
   },
   "servers" : [ {
-    "url" : "https://virtserver.swaggerhub.com/MiDS/NotificationsAPI/1.0.0",
+    "url" : "https://virtserver.swaggerhub.com/MiDS/BalancesAPI/1.0.0",
     "description" : "SwaggerHub API Auto Mocking"
   } ],
   "tags" : [ {
-    "name" : "view",
-    "description" : "view balances"
+    "name" : "balances",
+    "description" : "balances operations"
+  }, {
+    "name" : "transactions",
+    "description" : "transactions operations"
+  }, {
+    "name" : "deposits",
+    "description" : "deposits operations"
+  }, {
+    "name" : "sales",
+    "description" : "sales operations"
   } ],
   "paths" : {
     "/balances/stats" : {
       "get" : {
-        "tags" : [ "view" ],
+        "tags" : [ "balances" ],
         "summary" : "view statistics",
         "description" : "By calling this endpoint, you can view statistics\n",
         "operationId" : "viewBalanceStats",
@@ -51,12 +60,111 @@
         } ]
       }
     },
+    "/balances/stats/providers" : {
+      "get" : {
+        "tags" : [ "balances" ],
+        "summary" : "view statistics by provider",
+        "description" : "By calling this endpoint, you can view statistics by provider\n",
+        "operationId" : "viewBalanceStatsProvider",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BalanceStatsByProvider"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/balances/stats/banks" : {
+      "get" : {
+        "tags" : [ "balances" ],
+        "summary" : "view statistics by bank",
+        "description" : "By calling this endpoint, you can view statistics by bank\n",
+        "operationId" : "viewBalanceStatsBank",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BalanceStatsByBank"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/balances/stats/salesman" : {
+      "get" : {
+        "tags" : [ "balances" ],
+        "summary" : "view statistics by salesman type",
+        "description" : "By calling this endpoint, you can view statistics by salesman\n",
+        "operationId" : "viewBalanceStatsSalesman",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BalanceStatsBySalesmanType"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
     "/balances/requests" : {
       "get" : {
-        "tags" : [ "view" ],
-        "summary" : "view balances requests",
+        "tags" : [ "balances" ],
+        "summary" : "view all balances requests - admin",
         "description" : "By passing in the appropriate parameters, you can view balances requests\n",
-        "operationId" : "viewAllBalanceRequests",
+        "operationId" : "viewAllBalanceRequestsAdmin",
         "parameters" : [ {
           "name" : "agent",
           "in" : "query",
@@ -109,9 +217,87 @@
         } ]
       }
     },
+    "/balances/requests/{userId}" : {
+      "get" : {
+        "tags" : [ "balances" ],
+        "summary" : "view balances requests",
+        "description" : "By passing in the appropriate parameters, you can view balances requests\n",
+        "operationId" : "viewAllBalanceRequests",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "agent",
+          "in" : "query",
+          "description" : "agent search",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "daysFilter",
+          "in" : "query",
+          "description" : "Days Filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/BalanceRequests"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
     "/balances/requests/{requestId}" : {
       "put" : {
-        "tags" : [ "view" ],
+        "tags" : [ "balances" ],
         "summary" : "verify balances requests",
         "description" : "By passing in the appropriate parameters, you can approve or deny balance request\n",
         "operationId" : "verifyBalanceRequest",
@@ -187,7 +373,7 @@
     },
     "/balances/{clientType}" : {
       "get" : {
-        "tags" : [ "view" ],
+        "tags" : [ "balances" ],
         "summary" : "view balances of distributors, resellers, agents and api clients",
         "description" : "By passing in the appropriate parameters, you can view balances of distributors, resellers, agents and api clients\n",
         "operationId" : "viewBalance",
@@ -246,7 +432,7 @@
     },
     "/balances/{userId}/request/{handlerType}" : {
       "get" : {
-        "tags" : [ "view" ],
+        "tags" : [ "balances" ],
         "summary" : "view balance requests to agent for user",
         "description" : "By passing in the appropriate parameters, you can view balance requests\n",
         "operationId" : "viewBalanceRequests",
@@ -320,7 +506,7 @@
         } ]
       },
       "post" : {
-        "tags" : [ "view" ],
+        "tags" : [ "balances" ],
         "summary" : "new balance request to agent for user",
         "description" : "By passing in the appropriate parameters, you can create balance request\n",
         "operationId" : "newBalanceRequest",
@@ -392,16 +578,26 @@
         } ]
       }
     },
-    "/balances/{userId}/transfer" : {
+    "/balances/{userFrom}/transfer/{userTo}" : {
       "post" : {
-        "tags" : [ "view" ],
+        "tags" : [ "balances" ],
         "summary" : "transfer balance requests to agent for user",
         "description" : "By passing in the appropriate parameters, you can transfer balance",
         "operationId" : "transferBalance",
         "parameters" : [ {
-          "name" : "userId",
+          "name" : "userFrom",
           "in" : "path",
-          "description" : "user id",
+          "description" : "user from",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "userTo",
+          "in" : "path",
+          "description" : "user to",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -457,8 +653,8 @@
     },
     "/balances/{userId}/add" : {
       "put" : {
-        "tags" : [ "view" ],
-        "summary" : "add balance requests to agent",
+        "tags" : [ "balances" ],
+        "summary" : "add balance to agent",
         "description" : "By passing in the appropriate parameters, you can add balance",
         "operationId" : "addBalance",
         "parameters" : [ {
@@ -520,7 +716,7 @@
     },
     "/balances/{userId}/refund" : {
       "put" : {
-        "tags" : [ "view" ],
+        "tags" : [ "balances" ],
         "summary" : "refund balance requests to agent",
         "description" : "By passing in the appropriate parameters, you can refund balance",
         "operationId" : "refundBalance",
@@ -583,7 +779,7 @@
     },
     "/balances/{transactionId}/confirm" : {
       "post" : {
-        "tags" : [ "view" ],
+        "tags" : [ "balances" ],
         "summary" : "confirm transaction",
         "description" : "By passing in the appropriate parameters, you can confirm transaction\n",
         "operationId" : "confirmTransaction",
@@ -633,20 +829,467 @@
           "tokenAuth" : [ ]
         } ]
       }
+    },
+    "/transactions/{userId}" : {
+      "get" : {
+        "tags" : [ "transactions" ],
+        "summary" : "view all transactions",
+        "description" : "By passing in the appropriate parameters, you can view transactions\n",
+        "operationId" : "viewAllTransactions",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "agent id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "daysFilter",
+          "in" : "query",
+          "description" : "Days Filter",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TransactionsResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/transactions/status" : {
+      "get" : {
+        "tags" : [ "transactions" ],
+        "summary" : "view transaction status",
+        "description" : "By passing in the appropriate parameters, you can view transaction status\n",
+        "operationId" : "viewTransactionStatus",
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "query",
+          "description" : "search by name",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "phone",
+          "in" : "query",
+          "description" : "search by phone",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TransactionStatusResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/transactions/{userId}/deposit" : {
+      "post" : {
+        "tags" : [ "transactions" ],
+        "summary" : "add a new bank deposit",
+        "description" : "By passing in the appropriate parameters, you can add a new bank deposit",
+        "operationId" : "addDeposit",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_6"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/transactions/{userId}/withdrawal" : {
+      "post" : {
+        "tags" : [ "transactions" ],
+        "summary" : "add a new bank withdrawal",
+        "description" : "By passing in the appropriate parameters, you can add a new bank withdrawal",
+        "operationId" : "addWithdrawal",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_7"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/transactions/bank/new-payment" : {
+      "post" : {
+        "tags" : [ "transactions" ],
+        "summary" : "add a new bank payment",
+        "description" : "By passing in the appropriate parameters, you can add a new bank payment",
+        "operationId" : "addPayment",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_8"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/transactions/providers/balance" : {
+      "post" : {
+        "tags" : [ "transactions" ],
+        "summary" : "Add/Substract Balance",
+        "description" : "By passing in the appropriate parameters, you can Add/Substract Balance",
+        "operationId" : "addProviderBalance",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_9"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/deposits/stats/providers" : {
+      "get" : {
+        "tags" : [ "deposits" ],
+        "summary" : "view deposits by provider",
+        "description" : "By calling this endpoint, you can view deposits by provider\n",
+        "operationId" : "viewDepositsProvider",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DepositByProvider"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
     }
   },
   "components" : {
     "schemas" : {
       "BalanceStats" : {
-        "type" : "object",
-        "properties" : {
-          "totalAcceptedAmount" : {
-            "type" : "number"
-          },
-          "totalPendingRequests" : {
-            "type" : "number"
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/BalanceStats_data"
+            }
           }
-        }
+        } ]
+      },
+      "BalanceStatsByProvider" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/BalanceStatsByProvider_data"
+              }
+            }
+          }
+        } ]
+      },
+      "BalanceStatsByBank" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/BalanceStatsByBank_data"
+              }
+            }
+          }
+        } ]
+      },
+      "BalanceStatsBySalesmanType" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "salesmanType" : {
+                      "type" : "string"
+                    },
+                    "totalAcceptedAmount" : {
+                      "type" : "number"
+                    },
+                    "totalPendingRequests" : {
+                      "type" : "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } ]
+      },
+      "DepositByProvider" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/DepositByProvider_data"
+              }
+            }
+          }
+        } ]
       },
       "BalanceRequests" : {
         "type" : "object",
@@ -709,6 +1352,9 @@
           },
           "transactionRemark" : {
             "type" : "string"
+          },
+          "channel" : {
+            "type" : "string"
           }
         }
       },
@@ -747,8 +1393,41 @@
           },
           "paymentMode" : {
             "type" : "integer"
+          },
+          "channel" : {
+            "type" : "string"
           }
         }
+      },
+      "TransactionsResponse" : {
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TransactionsResponse_data"
+            }
+          }
+        },
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object"
+        } ]
+      },
+      "TransactionStatusResponse" : {
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TransactionsResponse_data"
+            }
+          }
+        },
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object"
+        } ]
       },
       "CommonResp" : {
         "type" : "object",
@@ -792,7 +1471,8 @@
             "example" : "Internal Server Error"
           },
           "message" : {
-            "type" : "string"
+            "type" : "string",
+            "example" : ""
           },
           "path" : {
             "type" : "string",
@@ -803,6 +1483,9 @@
       "body" : {
         "type" : "object",
         "properties" : {
+          "approverId" : {
+            "type" : "integer"
+          },
           "status" : {
             "type" : "integer"
           },
@@ -858,6 +1541,12 @@
           },
           "remarks" : {
             "type" : "string"
+          },
+          "pin" : {
+            "type" : "string"
+          },
+          "channel" : {
+            "type" : "string"
           }
         }
       },
@@ -876,6 +1565,9 @@
       "body_3" : {
         "type" : "object",
         "properties" : {
+          "adminId" : {
+            "type" : "integer"
+          },
           "type" : {
             "type" : "integer"
           },
@@ -884,12 +1576,18 @@
           },
           "amount" : {
             "type" : "number"
+          },
+          "channel" : {
+            "type" : "string"
           }
         }
       },
       "body_4" : {
         "type" : "object",
         "properties" : {
+          "adminId" : {
+            "type" : "integer"
+          },
           "clientId" : {
             "type" : "integer"
           },
@@ -904,16 +1602,221 @@
           },
           "pendingSettlement" : {
             "type" : "string"
+          },
+          "channel" : {
+            "type" : "string"
           }
         }
       },
       "body_5" : {
         "type" : "object",
         "properties" : {
+          "approverId" : {
+            "type" : "integer"
+          },
           "pin" : {
             "type" : "integer"
           },
           "mobileNumber" : {
+            "type" : "string"
+          }
+        }
+      },
+      "body_6" : {
+        "type" : "object",
+        "properties" : {
+          "debit" : {
+            "type" : "integer"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "transactionId" : {
+            "type" : "integer"
+          },
+          "transactionDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "voucherNo" : {
+            "type" : "string"
+          },
+          "iban" : {
+            "type" : "string"
+          },
+          "swift" : {
+            "type" : "string"
+          },
+          "channel" : {
+            "type" : "string"
+          }
+        }
+      },
+      "body_7" : {
+        "type" : "object",
+        "properties" : {
+          "debit" : {
+            "type" : "integer"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "transactionId" : {
+            "type" : "integer"
+          },
+          "transactionDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "voucherNo" : {
+            "type" : "string"
+          },
+          "iban" : {
+            "type" : "string"
+          },
+          "swift" : {
+            "type" : "string"
+          },
+          "channel" : {
+            "type" : "string"
+          }
+        }
+      },
+      "body_8" : {
+        "type" : "object",
+        "properties" : {
+          "debit" : {
+            "type" : "boolean"
+          },
+          "credit" : {
+            "type" : "boolean"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "transactionDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "transactionId" : {
+            "type" : "integer"
+          },
+          "voucherNo" : {
+            "type" : "string"
+          },
+          "iban" : {
+            "type" : "string"
+          },
+          "swift" : {
+            "type" : "string"
+          },
+          "channel" : {
+            "type" : "string"
+          }
+        }
+      },
+      "body_9" : {
+        "type" : "object",
+        "properties" : {
+          "debit" : {
+            "type" : "boolean"
+          },
+          "credit" : {
+            "type" : "boolean"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "referenceNo" : {
+            "type" : "string"
+          },
+          "provider" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "BalanceStats_data" : {
+        "type" : "object",
+        "properties" : {
+          "totalAcceptedAmount" : {
+            "type" : "number"
+          },
+          "totalPendingRequests" : {
+            "type" : "number"
+          }
+        }
+      },
+      "BalanceStatsByProvider_data" : {
+        "type" : "object",
+        "properties" : {
+          "provider" : {
+            "type" : "string"
+          },
+          "totalAcceptedAmount" : {
+            "type" : "number"
+          },
+          "totalPendingRequests" : {
+            "type" : "number"
+          }
+        }
+      },
+      "BalanceStatsByBank_data" : {
+        "type" : "object",
+        "properties" : {
+          "bank" : {
+            "type" : "string"
+          },
+          "totalAcceptedAmount" : {
+            "type" : "number"
+          },
+          "totalPendingRequests" : {
+            "type" : "number"
+          }
+        }
+      },
+      "DepositByProvider_data" : {
+        "type" : "object",
+        "properties" : {
+          "provider" : {
+            "type" : "string"
+          },
+          "totalAcceptedDeposit" : {
+            "type" : "number"
+          },
+          "totalPendingDeposit" : {
+            "type" : "number"
+          }
+        }
+      },
+      "TransactionsResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "requestId" : {
+            "type" : "integer"
+          },
+          "billNumber" : {
+            "type" : "integer"
+          },
+          "dateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "faceValue" : {
+            "type" : "number"
+          },
+          "netValue" : {
+            "type" : "number"
+          },
+          "provider" : {
+            "type" : "string"
+          },
+          "status" : {
             "type" : "string"
           }
         }
