@@ -20,6 +20,9 @@
     "application" : [ "read", "write" ]
   } ],
   "tags" : [ {
+    "name" : "sales-channel",
+    "description" : "sales channel"
+  }, {
     "name" : "Business Types"
   } ],
   "paths" : {
@@ -87,6 +90,193 @@
       }
     },
     "/users" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "View all users.",
+        "description" : "Gets a user profile by ID.\n",
+        "operationId" : "getUsers",
+        "parameters" : [ {
+          "name" : "usersList",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }, {
+          "name" : "fromUserId",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "toUserId",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "rolesId",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }, {
+          "name" : "fromJoinDate",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }, {
+          "name" : "toJoinDate",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }, {
+          "name" : "countryId",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }, {
+          "name" : "provinceId",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }, {
+          "name" : "fromBalance",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        }, {
+          "name" : "toBalance",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }, {
+          "name" : "parentId",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "hasDistributor",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "hasReseller",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AllUsers"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      },
       "post" : {
         "tags" : [ "Users" ],
         "summary" : "Add User operation",
@@ -266,7 +456,17 @@
           "explode" : false,
           "schema" : {
             "type" : "integer",
-            "format" : "int64"
+            "format" : "int32"
+          }
+        }, {
+          "name" : "deletedBy",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
           }
         } ],
         "responses" : {
@@ -294,6 +494,153 @@
         "security" : [ {
           "tokenAuth" : [ ]
         } ]
+      }
+    },
+    "/users/{userId}/request" : {
+      "delete" : {
+        "tags" : [ "Users" ],
+        "operationId" : "requestDelete_1",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "requestedBy",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/deactivate" : {
+      "put" : {
+        "tags" : [ "Users" ],
+        "operationId" : "deactivateUser",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "deactivatedBy",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserCommon"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/deactivate/request" : {
+      "put" : {
+        "tags" : [ "Users" ],
+        "operationId" : "requestDeactivate_1",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "requestedBy",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/users/{userId}/pin" : {
@@ -389,7 +736,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/UserResp"
+                  "$ref" : "#/components/schemas/PinResp"
                 }
               }
             }
@@ -406,6 +753,58 @@
           },
           "404" : {
             "description" : "User Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/pin/validate" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "The operation validates pin for the user",
+        "description" : "Validate Pin",
+        "operationId" : "validatePin",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PinValidateReq"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PinValidateResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments or Pin mismatch",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Phone number Not Found",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -636,6 +1035,45 @@
         } ]
       }
     },
+    "/users/{userId}/resellers" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "operationId" : "viewMyAgents",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/{userId}/password" : {
       "put" : {
         "tags" : [ "Users" ],
@@ -699,11 +1137,50 @@
         } ]
       }
     },
-    "/clients" : {
+    "/users/reset-password" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "Reset password operation",
+        "description" : "Reset password",
+        "operationId" : "resetPassword",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/passResetReq"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers" : {
       "get" : {
-        "tags" : [ "Clients" ],
-        "summary" : "Get Client list",
-        "description" : "Get Client list",
+        "tags" : [ "Customers" ],
+        "summary" : "Get Customers list",
+        "description" : "Get Customers list",
         "responses" : {
           "200" : {
             "description" : "Successful operation",
@@ -724,9 +1201,9 @@
         } ]
       },
       "post" : {
-        "tags" : [ "Clients" ],
-        "summary" : "Create Client",
-        "description" : "Create Client",
+        "tags" : [ "Customers" ],
+        "summary" : "Create Customers",
+        "description" : "Create Customers",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -763,15 +1240,15 @@
         } ]
       }
     },
-    "/clients/{clientId}" : {
+    "/customers/{customerId}" : {
       "get" : {
-        "tags" : [ "Clients" ],
-        "summary" : "Get Clients by Id",
-        "description" : "Get Clients",
+        "tags" : [ "Customers" ],
+        "summary" : "Get Customers by Id",
+        "description" : "Get Customers",
         "parameters" : [ {
-          "name" : "clientId",
+          "name" : "customerId",
           "in" : "path",
-          "description" : "Client ID",
+          "description" : "Customer ID",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -817,11 +1294,11 @@
         } ]
       },
       "put" : {
-        "tags" : [ "Clients" ],
-        "summary" : "Update Client by Id",
-        "description" : "Update Client",
+        "tags" : [ "Customers" ],
+        "summary" : "Update Customer by Id",
+        "description" : "Update Customer",
         "parameters" : [ {
-          "name" : "clientId",
+          "name" : "customerId",
           "in" : "path",
           "description" : "Client ID",
           "required" : true,
@@ -878,15 +1355,15 @@
         } ]
       }
     },
-    "/clients/{clientId}/activate" : {
+    "/customers/{customerId}/activate" : {
       "put" : {
-        "tags" : [ "Clients" ],
-        "summary" : "activate Client by Id",
-        "description" : "activate Client",
+        "tags" : [ "Customers" ],
+        "summary" : "activate Customer by Id",
+        "description" : "activate Customer",
         "parameters" : [ {
-          "name" : "clientId",
+          "name" : "customerId",
           "in" : "path",
-          "description" : "Client ID",
+          "description" : "Customer ID",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -908,6 +1385,198 @@
           },
           "404" : {
             "description" : "Client not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/agents" : {
+      "get" : {
+        "tags" : [ "Agents" ],
+        "summary" : "Get Agents list",
+        "description" : "Get Agents list",
+        "operationId" : "getAgents",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AgentView"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "Agents" ],
+        "summary" : "Create Agent",
+        "description" : "Create Agent",
+        "operationId" : "addAgent",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AgentCreate"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments or Mismatch Passwords",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/agents/invite/email" : {
+      "post" : {
+        "tags" : [ "Agents" ],
+        "summary" : "Invite Agent by email",
+        "description" : "Invite Agent by email",
+        "operationId" : "inviteAgentByEmail",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_6"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Argument",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/agents/register" : {
+      "post" : {
+        "tags" : [ "Agents" ],
+        "summary" : "Agent registration",
+        "description" : "Agent registration",
+        "operationId" : "registerAgent",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AgentRegister"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AgentRegisterResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Argument",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/agents/invite/sms" : {
+      "post" : {
+        "tags" : [ "Agents" ],
+        "summary" : "Invite Agent by sms",
+        "description" : "Invite Agent by sms",
+        "operationId" : "inviteAgentBySms",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_7"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Argument",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -965,7 +1634,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_6"
+                "$ref" : "#/components/schemas/body_8"
               }
             }
           }
@@ -1058,7 +1727,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_7"
+                "$ref" : "#/components/schemas/body_9"
               }
             }
           }
@@ -1105,6 +1774,7 @@
         "tags" : [ "Admin" ],
         "summary" : "Check if Password can be reset for Admin",
         "description" : "Check for Password Reset",
+        "operationId" : "resetPasswordAdmin",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -1120,7 +1790,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/UserResp"
+                  "$ref" : "#/components/schemas/CommonResp"
                 }
               }
             }
@@ -1174,7 +1844,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_8"
+                "$ref" : "#/components/schemas/body_10"
               }
             }
           }
@@ -1267,7 +1937,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_9"
+                "$ref" : "#/components/schemas/body_11"
               }
             }
           }
@@ -2248,7 +2918,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_10"
+                "$ref" : "#/components/schemas/body_12"
               }
             }
           },
@@ -2347,7 +3017,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_11"
+                "$ref" : "#/components/schemas/body_13"
               }
             }
           },
@@ -2360,6 +3030,764 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/inline_response_200_9"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/distributors" : {
+      "get" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View sales channel for distributors",
+        "description" : "Gets a user profile by ID.\n",
+        "operationId" : "getSalesChannelDistributors",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "description" : "search filter",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SalesChannelResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "Add new distributor",
+        "description" : "Add new distributor",
+        "operationId" : "addDistributor",
+        "requestBody" : {
+          "description" : "Input distributor type data to be add",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_14"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Adding Distributor Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/distributors/{id}" : {
+      "get" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View Profile of Distributor",
+        "description" : "Gets a distributor profile by ID.\n",
+        "operationId" : "getDistributorProfile",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "distributor id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/DistributorResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/resellers" : {
+      "get" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View sales channel for resellers",
+        "description" : "Gets a user profile by ID.\n",
+        "operationId" : "getSalesChannelResellers",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "description" : "search filter",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SalesChannelResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "Add new reseller",
+        "description" : "Add new reseller",
+        "operationId" : "addReseller",
+        "requestBody" : {
+          "description" : "Input reseller type data to be add",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_15"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Adding reseller Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/resellers/{id}" : {
+      "get" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View Profile of reseller",
+        "description" : "Gets a distributor profile by ID.\n",
+        "operationId" : "getResellerProfile",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "reseller id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ResellerResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/agents" : {
+      "get" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View sales channel for agents",
+        "description" : "Gets a agents \n",
+        "operationId" : "getSalesChannelAgents",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "description" : "search filter",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SalesChannelResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "Add new agent",
+        "description" : "Add new agent",
+        "operationId" : "addNewAgent",
+        "requestBody" : {
+          "description" : "Input agent type data to be add",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_16"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Adding agent Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/agents/{id}" : {
+      "get" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View Profile of agent",
+        "description" : "Gets a agent profile by ID.\n",
+        "operationId" : "getAgentProfile",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "agents id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AgentResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/lenders" : {
+      "get" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View sales channel for lenders",
+        "description" : "Gets a agents \n",
+        "operationId" : "getSalesChannelLenders",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "description" : "search filter",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SalesChannelResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "Add new lender",
+        "description" : "Add new lender",
+        "operationId" : "addLender",
+        "requestBody" : {
+          "description" : "Input lenders type data to be add",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_17"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Adding lender Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/lenders/{id}" : {
+      "get" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View Profile of lender",
+        "description" : "Gets a lender profile by ID.\n",
+        "operationId" : "getLenderProfile",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "lender id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/LenderResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/api-client" : {
+      "get" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View sales channel for api client",
+        "description" : "Gets a user profile by ID.\n",
+        "operationId" : "getSalesChannelApiClients",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "description" : "search filter",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SalesChannelApiClientsResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "Add new api client",
+        "description" : "Add new api client",
+        "operationId" : "addApiClient",
+        "requestBody" : {
+          "description" : "Input api client type data to be add",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_18"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Adding api client Successfull",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/{userType}/activate/{userId}" : {
+      "post" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View sales channel for api client",
+        "description" : "Gets a user profile by ID.\n",
+        "operationId" : "activateSalesChannelUser",
+        "parameters" : [ {
+          "name" : "userType",
+          "in" : "path",
+          "description" : "user type",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "distributor", "reseller", "agent", "lender" ]
+          }
+        }, {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_19"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CommonResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/sales-channel/{userType}/{userId}" : {
+      "delete" : {
+        "tags" : [ "sales-channel" ],
+        "summary" : "View sales channel for api client",
+        "description" : "Gets a user profile by ID.\n",
+        "operationId" : "deleteSalesChannelUser",
+        "parameters" : [ {
+          "name" : "userType",
+          "in" : "path",
+          "description" : "user type",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "distributor", "reseller", "agent", "api-client" ]
+          }
+        }, {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "user id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CommonResp"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
                 }
               }
             }
@@ -2389,29 +3817,53 @@
         "required" : [ "city", "country", "firstName", "lastName", "mobileNumber", "parentId", "role" ],
         "type" : "object",
         "properties" : {
-          "firstName" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "name" : {
             "type" : "string"
           },
-          "lastName" : {
+          "businessName" : {
             "type" : "string"
           },
-          "mobileNumber" : {
+          "mobileNo" : {
             "type" : "string"
           },
           "email" : {
             "type" : "string"
           },
           "country" : {
-            "type" : "integer"
+            "type" : "string"
           },
           "city" : {
-            "type" : "integer"
+            "type" : "string"
           },
           "role" : {
+            "type" : "string"
+          },
+          "province" : {
+            "type" : "string"
+          },
+          "resellerId" : {
             "type" : "integer"
           },
-          "parentId" : {
+          "distributorId" : {
             "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "balance" : {
+            "type" : "number"
+          },
+          "remarks" : {
+            "type" : "string"
+          },
+          "groups" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
           }
         }
       },
@@ -2452,6 +3904,61 @@
           }
         }
       },
+      "ViewMyAgentsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "string"
+          },
+          "province" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "role" : {
+            "type" : "string"
+          },
+          "joinDate" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommissionResponse" : {
+        "type" : "object",
+        "properties" : {
+          "providerId" : {
+            "type" : "integer"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          }
+        }
+      },
       "ClientCommon" : {
         "required" : [ "email", "firstName", "mobileNumber", "userId" ],
         "type" : "object",
@@ -2480,6 +3987,128 @@
           }
         }
       },
+      "AgentView" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "joinDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "status" : {
+            "type" : "integer"
+          },
+          "balance" : {
+            "type" : "number"
+          }
+        }
+      },
+      "AgentCreate" : {
+        "required" : [ "email", "firstName", "mobileNumber", "userId" ],
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "location" : {
+            "type" : "integer"
+          },
+          "country" : {
+            "type" : "integer"
+          },
+          "province" : {
+            "type" : "integer"
+          },
+          "city" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "AgentRegister" : {
+        "required" : [ "phoneNumber" ],
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "mpin" : {
+            "type" : "string"
+          },
+          "language" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AgentRegisterResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "anyOf" : [ {
+                  "type" : "object",
+                  "properties" : {
+                    "dateTime" : {
+                      "type" : "string",
+                      "format" : "datetime"
+                    },
+                    "phoneNumber" : {
+                      "type" : "string",
+                      "example" : "+930798768765"
+                    },
+                    "userId" : {
+                      "type" : "integer",
+                      "example" : 64
+                    },
+                    "firstName" : {
+                      "type" : "string"
+                    },
+                    "lastName" : {
+                      "type" : "string"
+                    },
+                    "language" : {
+                      "type" : "string",
+                      "example" : "en"
+                    }
+                  }
+                } ]
+              }
+            }
+          }
+        } ]
+      },
       "NewUser" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/UserCommon"
@@ -2491,10 +4120,48 @@
               "type" : "string"
             },
             "province" : {
+              "type" : "integer"
+            },
+            "alternateMobileNumber" : {
               "type" : "string"
+            },
+            "postalCode" : {
+              "type" : "string"
+            },
+            "position" : {
+              "type" : "string"
+            },
+            "profilePicture" : {
+              "type" : "string",
+              "format" : "binary"
             }
           }
         } ]
+      },
+      "passResetReq" : {
+        "required" : [ "confirmPassword", "country", "mobileNumber", "password", "pin", "userType" ],
+        "type" : "object",
+        "properties" : {
+          "userType" : {
+            "type" : "integer"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "integer"
+          },
+          "pin" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "confirmPassword" : {
+            "type" : "string"
+          }
+        },
+        "description" : "Request to reset password"
       },
       "otpReq" : {
         "required" : [ "mobileNumber", "role" ],
@@ -2515,7 +4182,13 @@
           "userId" : {
             "type" : "integer"
           },
-          "userName" : {
+          "role" : {
+            "$ref" : "#/components/schemas/Role"
+          },
+          "balance" : {
+            "type" : "number"
+          },
+          "firstName" : {
             "type" : "string"
           },
           "lastName" : {
@@ -2525,6 +4198,9 @@
             "type" : "string"
           },
           "city" : {
+            "type" : "string"
+          },
+          "province" : {
             "type" : "string"
           },
           "address" : {
@@ -2538,8 +4214,42 @@
           },
           "email" : {
             "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "profilePicture" : {
+            "type" : "string"
+          },
+          "joinDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "groups" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer"
+            }
+          },
+          "status" : {
+            "type" : "string"
           }
         }
+      },
+      "AllUsers" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/ExistingUser"
+              }
+            }
+          }
+        } ]
       },
       "UserResp" : {
         "allOf" : [ {
@@ -2745,9 +4455,49 @@
             "type" : "string"
           },
           "confirmPin" : {
+            "maxLength" : 4,
+            "minLength" : 4,
             "type" : "string"
           }
         }
+      },
+      "PinValidateReq" : {
+        "required" : [ "phoneNumber", "pin" ],
+        "type" : "object",
+        "properties" : {
+          "pin" : {
+            "maxLength" : 4,
+            "minLength" : 4,
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PinResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/PinResp_data"
+            }
+          }
+        } ]
+      },
+      "PinValidateResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/PinValidateResp_data"
+            }
+          }
+        } ]
       },
       "AuthenticateResp" : {
         "allOf" : [ {
@@ -2917,6 +4667,110 @@
           },
           "hierarchy" : {
             "type" : "integer"
+          },
+          "usersCount" : {
+            "type" : "integer"
+          },
+          "permission" : {
+            "$ref" : "#/components/schemas/PermissionsInfo"
+          }
+        }
+      },
+      "PermissionsInfo" : {
+        "type" : "object",
+        "properties" : {
+          "roleName" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "hierarchy" : {
+            "type" : "integer"
+          },
+          "adminId" : {
+            "type" : "integer"
+          },
+          "dashBoard" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "manageUsers" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "manageBalances" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "livePerformance" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "manageProviders" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "statements" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "transactions" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "cmsManagers" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "reports" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "boolean"
+              }
+            }
           }
         }
       },
@@ -3261,6 +5115,228 @@
           }
         }
       },
+      "SalesChannelCommon" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "location" : {
+            "type" : "string"
+          },
+          "joinDate" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "SalesChannelResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "allOf" : [ {
+                  "$ref" : "#/components/schemas/SalesChannelCommon"
+                }, {
+                  "type" : "object",
+                  "properties" : {
+                    "groups" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "string"
+                      }
+                    },
+                    "product" : {
+                      "type" : "string"
+                    },
+                    "status" : {
+                      "type" : "string"
+                    }
+                  }
+                } ]
+              }
+            }
+          }
+        } ]
+      },
+      "SalesChannelApiClientsResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/SalesChannelCommon"
+              }
+            }
+          }
+        } ]
+      },
+      "SalesChannelBasicInfo" : {
+        "type" : "object",
+        "properties" : {
+          "basicInfo" : {
+            "$ref" : "#/components/schemas/SalesChannelBasicInfo_basicInfo"
+          }
+        }
+      },
+      "SalesChannelAccountInfo" : {
+        "type" : "object",
+        "properties" : {
+          "accountInfo" : {
+            "$ref" : "#/components/schemas/SalesChannelAccountInfo_accountInfo"
+          }
+        }
+      },
+      "SalesChannelProvidersCommission" : {
+        "type" : "object",
+        "properties" : {
+          "providersAndCommission" : {
+            "$ref" : "#/components/schemas/SalesChannelProvidersCommission_providersAndCommission"
+          }
+        }
+      },
+      "SalesChannelTarget" : {
+        "type" : "object",
+        "properties" : {
+          "target" : {
+            "$ref" : "#/components/schemas/SalesChannelTarget_target"
+          }
+        }
+      },
+      "SalesChannelOtherinfo" : {
+        "type" : "object",
+        "properties" : {
+          "otherInfo" : {
+            "$ref" : "#/components/schemas/SalesChannelOtherinfo_otherInfo"
+          }
+        }
+      },
+      "SalesChannelBranch" : {
+        "type" : "object",
+        "properties" : {
+          "branch" : {
+            "$ref" : "#/components/schemas/SalesChannelBranch_branch"
+          }
+        }
+      },
+      "DistributorResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "allOf" : [ {
+                  "$ref" : "#/components/schemas/SalesChannelBasicInfo"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelAccountInfo"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelProvidersCommission"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelTarget"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelOtherinfo"
+                } ]
+              }
+            }
+          }
+        } ]
+      },
+      "ResellerResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "allOf" : [ {
+                  "$ref" : "#/components/schemas/SalesChannelBasicInfo"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelAccountInfo"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelProvidersCommission"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelTarget"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelBranch"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelOtherinfo"
+                } ]
+              }
+            }
+          }
+        } ]
+      },
+      "AgentResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "allOf" : [ {
+                  "$ref" : "#/components/schemas/SalesChannelBasicInfo"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelAccountInfo"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelProvidersCommission"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelTarget"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelBranch"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelOtherinfo"
+                } ]
+              }
+            }
+          }
+        } ]
+      },
+      "LenderResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "allOf" : [ {
+                  "$ref" : "#/components/schemas/SalesChannelBasicInfo"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelAccountInfo"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelProvidersCommission"
+                }, {
+                  "$ref" : "#/components/schemas/SalesChannelOtherinfo"
+                } ]
+              }
+            }
+          }
+        } ]
+      },
       "body" : {
         "required" : [ "password", "username" ],
         "type" : "object",
@@ -3367,6 +5443,9 @@
           },
           "confirmPassword" : {
             "type" : "string"
+          },
+          "isForgotPassword" : {
+            "type" : "string"
           }
         }
       },
@@ -3397,54 +5476,20 @@
         } ]
       },
       "body_6" : {
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/UserCommon"
-        }, {
-          "required" : [ "profilePicture", "status" ],
-          "type" : "object",
-          "properties" : {
-            "profilePicture" : {
-              "type" : "string"
-            },
-            "groups" : {
-              "type" : "array",
-              "items" : {
-                "type" : "integer"
-              }
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "remarks" : {
-              "type" : "string"
-            }
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string"
           }
-        } ]
+        }
       },
       "body_7" : {
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/UserCommon"
-        }, {
-          "required" : [ "profilePicture", "status" ],
-          "type" : "object",
-          "properties" : {
-            "profilePicture" : {
-              "type" : "string"
-            },
-            "groups" : {
-              "type" : "array",
-              "items" : {
-                "type" : "integer"
-              }
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "remarks" : {
-              "type" : "string"
-            }
+        "type" : "object",
+        "properties" : {
+          "sms" : {
+            "type" : "string"
           }
-        } ]
+        }
       },
       "body_8" : {
         "allOf" : [ {
@@ -3472,6 +5517,56 @@
         } ]
       },
       "body_9" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UserCommon"
+        }, {
+          "required" : [ "profilePicture", "status" ],
+          "type" : "object",
+          "properties" : {
+            "profilePicture" : {
+              "type" : "string"
+            },
+            "groups" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer"
+              }
+            },
+            "status" : {
+              "type" : "string"
+            },
+            "remarks" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "body_10" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UserCommon"
+        }, {
+          "required" : [ "profilePicture", "status" ],
+          "type" : "object",
+          "properties" : {
+            "profilePicture" : {
+              "type" : "string"
+            },
+            "groups" : {
+              "type" : "array",
+              "items" : {
+                "type" : "integer"
+              }
+            },
+            "status" : {
+              "type" : "string"
+            },
+            "remarks" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "body_11" : {
         "allOf" : [ {
           "$ref" : "#/components/schemas/UserCommon"
         }, {
@@ -3601,7 +5696,7 @@
           }
         } ]
       },
-      "body_10" : {
+      "body_12" : {
         "type" : "object",
         "properties" : {
           "groupName" : {
@@ -3645,7 +5740,7 @@
           }
         } ]
       },
-      "body_11" : {
+      "body_13" : {
         "type" : "object",
         "properties" : {
           "userList" : {
@@ -3653,6 +5748,79 @@
             "items" : {
               "type" : "integer"
             }
+          }
+        }
+      },
+      "body_14" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/SalesChannelBasicInfo"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelAccountInfo"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelProvidersCommission"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelTarget"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelOtherinfo"
+        } ]
+      },
+      "body_15" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/SalesChannelBasicInfo"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelAccountInfo"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelProvidersCommission"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelBranch"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelTarget"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelOtherinfo"
+        } ]
+      },
+      "body_16" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/SalesChannelBasicInfo"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelAccountInfo"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelProvidersCommission"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelBranch"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelTarget"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelOtherinfo"
+        } ]
+      },
+      "body_17" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/SalesChannelBasicInfo"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelAccountInfo"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelProvidersCommission"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelOtherinfo"
+        } ]
+      },
+      "body_18" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/SalesChannelBasicInfo"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelAccountInfo"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelProvidersCommission"
+        }, {
+          "$ref" : "#/components/schemas/SalesChannelOtherinfo"
+        } ]
+      },
+      "body_19" : {
+        "type" : "object",
+        "properties" : {
+          "activate" : {
+            "type" : "boolean"
           }
         }
       },
@@ -3710,6 +5878,28 @@
             "type" : "string"
           },
           "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PinResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "PinValidateResp_data" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "agentNames" : {
             "type" : "string"
           }
         }
@@ -3847,6 +6037,135 @@
             "type" : "string"
           },
           "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "SalesChannelBasicInfo_basicInfo" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "businessName" : {
+            "type" : "string"
+          },
+          "mobileNumber" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "streetName" : {
+            "type" : "string"
+          },
+          "streetNumber" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "string"
+          },
+          "state" : {
+            "type" : "string"
+          },
+          "postalCode" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "avatar" : {
+            "type" : "string"
+          }
+        }
+      },
+      "SalesChannelAccountInfo_accountInfo" : {
+        "type" : "object",
+        "properties" : {
+          "receiver" : {
+            "type" : "string"
+          },
+          "bankName" : {
+            "type" : "string"
+          },
+          "iban" : {
+            "type" : "string"
+          },
+          "swift" : {
+            "type" : "string"
+          }
+        }
+      },
+      "SalesChannelProvidersCommission_providersAndCommission" : {
+        "type" : "object",
+        "properties" : {
+          "openCommissionStructure" : {
+            "type" : "boolean"
+          },
+          "provider" : {
+            "type" : "string"
+          },
+          "products" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "detailedCommission" : {
+            "type" : "number"
+          }
+        }
+      },
+      "SalesChannelTarget_target" : {
+        "type" : "object",
+        "properties" : {
+          "setTarget" : {
+            "type" : "boolean"
+          },
+          "period" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "target" : {
+            "type" : "number"
+          }
+        }
+      },
+      "SalesChannelOtherinfo_otherInfo" : {
+        "type" : "object",
+        "properties" : {
+          "groups" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "status" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "remarks" : {
+            "type" : "string"
+          }
+        }
+      },
+      "SalesChannelBranch_branch" : {
+        "type" : "object",
+        "properties" : {
+          "isUplineDistributor" : {
+            "type" : "boolean"
+          },
+          "uplineDistributor" : {
             "type" : "string"
           }
         }
