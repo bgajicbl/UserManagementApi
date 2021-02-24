@@ -1176,6 +1176,57 @@
         }
       }
     },
+    "/users/getprofile/{phoneNumber}" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "fetch user profile using phone number",
+        "description" : "fetch user profile using phone number",
+        "operationId" : "getProfileByPhone",
+        "parameters" : [ {
+          "name" : "phoneNumber",
+          "in" : "path",
+          "description" : "phoneNumber",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetProfileResp"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid Arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Phone number not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/customers" : {
       "get" : {
         "tags" : [ "Customers" ],
@@ -3798,6 +3849,254 @@
         } ]
       }
     },
+    "/levels/get-level" : {
+      "get" : {
+        "tags" : [ "Levels" ],
+        "operationId" : "getLevel",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "default response",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LevelsResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/levels/edit-level" : {
+      "post" : {
+        "tags" : [ "Levels" ],
+        "operationId" : "editLevel",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Levels"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "default response",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LevelsResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/levels/view-level" : {
+      "get" : {
+        "tags" : [ "Levels" ],
+        "operationId" : "viewLevel",
+        "parameters" : [ {
+          "name" : "levelId",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "default response",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LevelsResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/levels/new-level" : {
+      "post" : {
+        "tags" : [ "Levels" ],
+        "operationId" : "addLevel",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserLevelsInfo"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "default response",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LevelsResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/levels/move-level" : {
+      "post" : {
+        "tags" : [ "Levels" ],
+        "operationId" : "moveLevel",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "toUplineId",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "default response",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LevelsResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/levels/upline-resellers-and-levels" : {
+      "get" : {
+        "tags" : [ "Levels" ],
+        "operationId" : "getUplineResellers",
+        "responses" : {
+          "200" : {
+            "description" : "default response",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LevelsListResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/levels/export" : {
+      "get" : {
+        "tags" : [ "Levels" ],
+        "operationId" : "exportLevels",
+        "parameters" : [ {
+          "name" : "fromLevelId",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "toLevelId",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_9"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/levels/view-reseller" : {
+      "get" : {
+        "tags" : [ "Levels" ],
+        "operationId" : "viewReseller",
+        "parameters" : [ {
+          "name" : "uplineId",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "default response",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LevelsListResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ping" : {
       "get" : {
         "summary" : "Server heartbeat operation",
@@ -4101,6 +4400,39 @@
                     "language" : {
                       "type" : "string",
                       "example" : "en"
+                    }
+                  }
+                } ]
+              }
+            }
+          }
+        } ]
+      },
+      "GetProfileResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "anyOf" : [ {
+                  "type" : "object",
+                  "properties" : {
+                    "userId" : {
+                      "type" : "integer",
+                      "example" : 64
+                    },
+                    "firstName" : {
+                      "type" : "string"
+                    },
+                    "lastName" : {
+                      "type" : "string"
+                    },
+                    "status" : {
+                      "type" : "string",
+                      "example" : "Active"
                     }
                   }
                 } ]
@@ -5336,6 +5668,90 @@
             }
           }
         } ]
+      },
+      "LevelsResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "object",
+              "allOf" : [ {
+                "$ref" : "#/components/schemas/Levels"
+              } ]
+            }
+          }
+        } ]
+      },
+      "LevelsListResp" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "type" : "array",
+              "items" : {
+                "allOf" : [ {
+                  "$ref" : "#/components/schemas/Levels"
+                } ]
+              }
+            }
+          }
+        } ]
+      },
+      "Levels" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "levelName" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "uplineId" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "floatAccount" : {
+            "type" : "boolean"
+          },
+          "levelId" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "roleId" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "UserLevelsInfo" : {
+        "type" : "object",
+        "properties" : {
+          "levelName" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "uplineId" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "floatAccount" : {
+            "type" : "boolean"
+          },
+          "roleId" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
       },
       "body" : {
         "required" : [ "password", "username" ],
