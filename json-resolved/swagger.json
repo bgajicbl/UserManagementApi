@@ -1,8 +1,8 @@
 {
   "openapi" : "3.0.0",
   "info" : {
-    "title" : "Recharge API",
-    "description" : "This is a recharge API",
+    "title" : "Recharges API",
+    "description" : "This is a recharges API",
     "contact" : {
       "email" : "support@naqdina.com"
     },
@@ -49,7 +49,7 @@
                 "schema" : {
                   "type" : "array",
                   "items" : {
-                    "$ref" : "#/components/schemas/TransactionResponse"
+                    "$ref" : "#/components/schemas/TransactionsListResponse"
                   }
                 }
               }
@@ -104,7 +104,60 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/TopupResponse"
+                  "$ref" : "#/components/schemas/RechargeResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/recharges/topup" : {
+      "post" : {
+        "tags" : [ "topup" ],
+        "summary" : "Request from Recharge Microservice MNO Adapters",
+        "description" : "recharges user using mobile topup",
+        "operationId" : "rechargeTopupMNO",
+        "requestBody" : {
+          "description" : "mobile topup details",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TopupRequestMNO"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TopupResponseMNO"
                 }
               }
             }
@@ -168,7 +221,60 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/EvoucherResponse"
+                  "$ref" : "#/components/schemas/RechargeResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommonErrorResp"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ServerErrorResp"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "tokenAuth" : [ ]
+        } ]
+      }
+    },
+    "/recharges/redeem-voucher" : {
+      "post" : {
+        "tags" : [ "e-voucher" ],
+        "summary" : "redeem e-voucher",
+        "description" : "redeem e-voucher",
+        "operationId" : "redeemVaucher",
+        "requestBody" : {
+          "description" : "voucher details",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RedeemVoucherRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RedeemVoucherResponse"
                 }
               }
             }
@@ -206,13 +312,15 @@
         "type" : "object",
         "properties" : {
           "country" : {
-            "type" : "integer"
+            "type" : "integer",
+            "format" : "int32"
           },
-          "mobilePhone" : {
+          "customerMobilePhone" : {
             "type" : "string"
           },
-          "mobileOperator" : {
-            "type" : "integer"
+          "provider" : {
+            "type" : "integer",
+            "format" : "int32"
           },
           "amount" : {
             "type" : "number"
@@ -222,23 +330,119 @@
           },
           "channel" : {
             "type" : "string"
+          },
+          "agentMobileNumber" : {
+            "type" : "string"
+          },
+          "narration" : {
+            "type" : "string"
           }
         }
       },
-      "TopupResponse" : {
+      "RedeemVoucherRequest" : {
         "type" : "object",
         "properties" : {
-          "dateTime" : {
+          "customerMobilePhone" : {
+            "type" : "string"
+          },
+          "provider" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "voucher" : {
+            "type" : "string"
+          },
+          "channel" : {
+            "type" : "string"
+          },
+          "narration" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RedeemVoucherResponse" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/RedeemVoucherResponse_data"
+            }
+          }
+        } ]
+      },
+      "RechargeResponse" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/CommonResp"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "data" : {
+              "$ref" : "#/components/schemas/RechargeResponse_data"
+            }
+          }
+        } ]
+      },
+      "TopupRequestMNO" : {
+        "type" : "object",
+        "properties" : {
+          "receivingMSISDN" : {
+            "type" : "string"
+          },
+          "initiatingMSISDN" : {
+            "type" : "string"
+          },
+          "transactionId" : {
+            "type" : "integer"
+          },
+          "currency" : {
+            "type" : "string"
+          },
+          "transactionDate" : {
             "type" : "string",
             "format" : "timestamp"
           },
-          "mobilePhone" : {
+          "channel" : {
+            "type" : "string"
+          },
+          "topupType" : {
+            "type" : "string"
+          },
+          "operatorIdentifier" : {
             "type" : "string"
           },
           "amount" : {
             "type" : "number"
+          }
+        }
+      },
+      "TopupResponseMNO" : {
+        "type" : "object",
+        "properties" : {
+          "transactionId" : {
+            "type" : "integer"
           },
-          "status" : {
+          "currency" : {
+            "type" : "string"
+          },
+          "tansactionDate" : {
+            "type" : "string",
+            "format" : "timestamp"
+          },
+          "operatorIdentifier" : {
+            "type" : "string"
+          },
+          "responseCode" : {
+            "type" : "string"
+          },
+          "responseDescription" : {
+            "type" : "string"
+          },
+          "operatorResponseCode" : {
+            "type" : "string"
+          },
+          "operatorReference" : {
             "type" : "string"
           }
         }
@@ -246,8 +450,16 @@
       "EvoucherRequest" : {
         "type" : "object",
         "properties" : {
-          "mobileOperator" : {
-            "type" : "integer"
+          "country" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "customerMobilePhone" : {
+            "type" : "string"
+          },
+          "provider" : {
+            "type" : "integer",
+            "format" : "int32"
           },
           "amount" : {
             "type" : "number"
@@ -256,6 +468,12 @@
             "type" : "string"
           },
           "channel" : {
+            "type" : "string"
+          },
+          "agentMobileNumber" : {
+            "type" : "string"
+          },
+          "narration" : {
             "type" : "string"
           }
         }
@@ -281,20 +499,99 @@
           }
         }
       },
-      "TransactionResponse" : {
+      "TransactionsListResponse" : {
         "type" : "object",
         "properties" : {
-          "requestnumber" : {
+          "status" : {
             "type" : "string"
           },
-          "mobilePhone" : {
+          "code" : {
             "type" : "string"
           },
-          "mobileOperator" : {
+          "responseMessage" : {
             "type" : "string"
           },
-          "amount" : {
-            "type" : "number"
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RechargeTransaction"
+            }
+          }
+        }
+      },
+      "RechargeTransaction" : {
+        "type" : "object",
+        "properties" : {
+          "transactionDateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "customerMobileNumber" : {
+            "type" : "string"
+          },
+          "transactionAmount" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "providerId" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "providerName" : {
+            "type" : "string"
+          },
+          "responseCode" : {
+            "type" : "string"
+          },
+          "responseDescription" : {
+            "type" : "string"
+          },
+          "responseStatus" : {
+            "type" : "string"
+          },
+          "customerSms" : {
+            "type" : "string"
+          },
+          "agentSms" : {
+            "type" : "string"
+          },
+          "resellerId" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "resellerMobileNumber" : {
+            "type" : "string"
+          },
+          "pin" : {
+            "type" : "string"
+          },
+          "channel" : {
+            "type" : "string"
+          },
+          "narration" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "evoucherNumber" : {
+            "type" : "string"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int32"
           }
         }
       },
@@ -340,11 +637,50 @@
             "example" : "Internal Server Error"
           },
           "message" : {
-            "type" : "string"
+            "type" : "string",
+            "example" : ""
           },
           "path" : {
             "type" : "string",
             "example" : "/balances/distributors"
+          }
+        }
+      },
+      "RedeemVoucherResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "customerMobilePhone" : {
+            "type" : "string"
+          },
+          "provider" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RechargeResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "dateTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "evoucherNumber" : {
+            "type" : "string"
+          },
+          "mobileOperator" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "amount" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "mobilePhone" : {
+            "type" : "string"
           }
         }
       },
